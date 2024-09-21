@@ -7,6 +7,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+extern void isa_reg_display(void);
+
 void cpu_exec(uint64_t);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -38,6 +40,54 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args){
+  char *steps = strtok(args, " ");
+  int n=1;
+  if(steps != NULL){
+    n = atoi(steps);      // ascii to integer
+  }
+  cpu_exec(n);
+  return 0;
+}
+
+static int cmd_info(char *args){
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    printf("Unknown command, please input the subcmd!\n");
+  }
+  else if(strcmp(arg, "r") == 0){
+    isa_reg_display();
+  }
+  else if(strcmp(arg, "w") == 0){
+
+  }
+  else{
+    printf("Unknown command, please check the subcmd!\n");
+  }
+  return 0;
+}
+
+static int cmd_x(char *args) { 
+    char *N = strtok(NULL, " ");
+  char *arg = strtok(NULL, " ");
+  if(N == NULL || arg == NULL){
+    printf("Unknown command, please input the N and the address!\n");
+    return 0;
+  }
+  int n = atoi(N);
+    paddr_t addr = strtol(arg, NULL, 16);
+    for(int i=0; i<n; i++) {
+        printf("0x%08x: ", addr);
+        for(int j=0; j<4; j++) {
+            printf("%02x ", paddr_read(addr, 1));
+            addr++;
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
+
 static struct {
   char *name;
   char *description;
@@ -46,6 +96,9 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "si", "Execute N instructions in a single step", cmd_si},
+  { "info", "Print the state of the program",cmd_info},
+  { "x", "Scan memory", cmd_x},
 
   /* TODO: Add more commands */
 
