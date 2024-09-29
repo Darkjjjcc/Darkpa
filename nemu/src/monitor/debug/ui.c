@@ -68,7 +68,7 @@ static int cmd_info(char *args){
 }
 
 static int cmd_x(char *args) { 
-    char *N = strtok(NULL, " ");
+  char *N = strtok(NULL, " ");
   char *arg = strtok(NULL, " ");
   if(N == NULL || arg == NULL){
     printf("Unknown command, please input the N and the address!\n");
@@ -87,6 +87,19 @@ static int cmd_x(char *args) {
     return 0;
 }
 
+static int cmd_p(char *args) {
+  char *arg = strtok(NULL, " ");
+  bool success = true;
+  uint32_t result = expr(arg, &success);
+  if(success) {
+    printf("%s = %u\n", arg, result);
+  }
+  else {
+    printf("Invalid expression!\n");
+  }
+  return 0;
+}
+
 
 static struct {
   char *name;
@@ -99,6 +112,7 @@ static struct {
   { "si", "Execute N instructions in a single step", cmd_si},
   { "info", "Print the state of the program",cmd_info},
   { "x", "Scan memory", cmd_x},
+  { "p", "Evaluate the expression", cmd_p},
 
   /* TODO: Add more commands */
 

@@ -6,8 +6,18 @@
 #include <sys/types.h>
 #include <regex.h>
 
+
+/* PA1.2 表达式求值_task1: 补充token类型*/
 enum {
-  TK_NOTYPE = 256, TK_EQ
+  TK_NOTYPE = 256,    // spaces
+  TK_EQ,              // equal
+  TK_NEQ,             // not equal
+  TK_NUM,             // number
+  TK_HEX_NUM,         // hex number
+  TK_AND,             // and
+  TK_OR,              // or
+  TK_REG,             // register
+
 
   /* TODO: Add more token types */
 
@@ -21,10 +31,24 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
+  /* PA1.2 表达式求值_task2: 补充规则,词法分析
+   */
 
   {" +", TK_NOTYPE},    // spaces
+  {"\\*", '*'},         // multiply
+  {"\\/", '/'},         // divide
   {"\\+", '+'},         // plus
-  {"==", TK_EQ}         // equal
+  {"\\-", '-'},         // minus
+  {"==", TK_EQ},        // equal
+  {"!=", TK_NEQ},       // not equal
+  {"0x[0-9a-fA-F]+", TK_HEX_NUM}, // hex number
+  {"[0-9]+", TK_NUM},   // number
+  {"\\(", '('},         // left bracket
+  {"\\)", ')'},         // right bracket
+  {"&&", TK_AND},       // and
+  {"\\|\\|", TK_OR},    // or
+  {"\\$[a-zA-Z]+", TK_REG}, // register
+
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -79,7 +103,55 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
+        /* PA1.2 表达式求值_task3: 补充token类型
+         * tokens数组中的每一个元素都是一个token结构体，包含两个成员：
+         * 1. type: 表示token的类型，是一个整数，可以是上面定义的TK_NOTYPE、TK_EQ等
+         * 2. str: 表示token的字符串，是一个字符数组，用于存储token的字符串
+        */
         switch (rules[i].token_type) {
+		      TK_NOTYPE:break;
+          case TK_NOTYPE:break;
+          case TK_NUM: 
+          {
+            if (substr_len>32) { puts("The length of number is too long!"); return false; }
+			      tokens[nr_token].type='0';
+            strncpy(tokens[nr_token].str,substr_start,substr_len);
+            tokens[nr_token].str[substr_len]='\0';
+            ++nr_token;
+            break;
+          }
+          case TK_HEX_NUM:
+          {
+          if (substr_len>32) { puts("The length of number is too long!"); return false; }
+            tokens[nr_token].type='6';
+            strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
+            tokens[nr_token].str[substr_len-2]='\0';
+            ++nr_token;
+            break;
+          }
+
+          // fractions
+          case '(':{tokens[nr_token++].type='(';break;}
+          case ')':{tokens[nr_token++].type=')';break;}
+
+          // operators
+          case '*':{tokens[nr_token++].type='*';break;}
+          case '/':{tokens[nr_token++].type='/';break;}
+          case '-':{tokens[nr_token++].type='-';break;}
+          case '+':{tokens[nr_token++].type='+';break;}
+          case TK_EQ:{tokens[nr_token++].type='=';break;}
+          case TK_NEQ:{tokens[nr_token++].type='!';break;}
+          case TK_AND:{tokens[nr_token++].type='&';break;}
+          case TK_OR:{tokens[nr_token++].type='|';break;}
+
+          case TK_REG:
+          {
+            tokens[nr_token].type='r';  
+            strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+            tokens[nr_token].str[substr_len-1]='\0';
+            ++nr_token;
+            break;
+          }
           default: TODO();
         }
 
@@ -96,14 +168,92 @@ static bool make_token(char *e) {
   return true;
 }
 
+uint32_t check_parentheses(int start, int end){
+  if (tokens[start].type != '(' || tokens[end].type != ')') {
+    return false;
+  }
+  int i, cnt = 0;
+  for (i = start + 1; i < end; i++) {
+    if (tokens[i].type == '(') {
+      cnt++;
+    }
+    else if (tokens[i].type == ')') {
+      cnt--;
+    }
+    if (cnt < 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+uint32_t dominant_operator(int start, int end) {
+  int i, cnt = 0, pos = -1;
+  for (i = start; i <= end; i++) {
+    if (tokens[i].type == '(') {
+      cnt++;
+    }
+    else if (tokens[i].type == ')') {
+      cnt--;
+    }
+    else if (cnt == 0) {
+      if (tokens[i].type == '+' || tokens[i].type == '-') {
+        pos = i;
+      }
+      else if (tokens[i].type == '*' || tokens[i].type == '/') {
+        return i;
+      }
+    }
+  }
+  return pos;
+}
+
+uint32_t eval(int start, int end, bool *success) {
+  if (start > end) {
+    /* Bad expression */
+    *success = false;
+    return 0;
+  }
+  else if (start == end) {
+    // Single token.
+    if(tokens[start].type == '0') return atoi(tokens[start].str);
+    else if(tokens[start].type == '6') return strtol(tokens[start].str,NULL,16);
+    else if(tokens[start].type == 'r') return isa_reg_str2val(tokens[start].str+1,success);
+    else assert(0);
+  }
+  else if (check_parentheses(start, end) == true) {
+    // The expression is surrounded by a matched pair of parentheses.
+    return eval(start + 1, end - 1, success);
+  }
+  else {
+    // Find the dominant operator in the token expression.
+    int op = dominant_operator(start, end);
+    if (op == -1) {
+      *success = false;
+      return 0;
+    }
+    uint32_t val1 = eval(start, op - 1, success);
+    uint32_t val2 = eval(op + 1, end, success);
+    switch (tokens[op].type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+    
+  }
+}
+
+
+
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
-
-  /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  *success = true;
+  return eval(0, nr_token - 1, success);
 
   return 0;
 }
