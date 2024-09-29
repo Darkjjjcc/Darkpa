@@ -241,7 +241,7 @@ uint32_t eval(int start, int end, bool *success) {
   }
   else {
     // Find the dominant operator in the token expression.
-    int op = main(start, end);
+    int op = main_operator(start, end);
     if (op == -1) {
       *success = false;
       return 0;
