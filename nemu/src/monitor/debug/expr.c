@@ -131,18 +131,18 @@ static bool make_token(char *e) {
           }
 
           // fractions
-          case '(':{tokens[nr_token++].type='(';break;}
-          case ')':{tokens[nr_token++].type=')';break;}
+          case '(':
+          case ')':
 
           // operators
-          case '*':{tokens[nr_token++].type='*';break;}
-          case '/':{tokens[nr_token++].type='/';break;}
-          case '-':{tokens[nr_token++].type='-';break;}
-          case '+':{tokens[nr_token++].type='+';break;}
-          case TK_EQ:{tokens[nr_token++].type='=';break;}
-          case TK_NEQ:{tokens[nr_token++].type='!';break;}
-          case TK_AND:{tokens[nr_token++].type='&';break;}
-          case TK_OR:{tokens[nr_token++].type='|';break;}
+          case '*':
+          case '/':
+          case '-':
+          case '+':
+          case TK_EQ:
+          case TK_NEQ:
+          case TK_AND:
+          case TK_OR:{tokens[nr_token++].type=rules[i].token_type;break;}
 
           case TK_REG:
           {
@@ -191,7 +191,7 @@ uint32_t operator_priority(int type) {
   switch (type) {
     case '|': return 1;
     case '&': return 2;
-    case '=': case '!': return 3;
+    case TK_EQ: case TK_NEQ: return 3;
     case '+': case '-': return 4;
     case '*': case '/': return 5;
     case '(': return 6;
@@ -210,7 +210,7 @@ uint32_t main_operator(int start, int end) {
       cnt--;
     }
     if (cnt == 0) {
-      if (tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || tokens[i].type == '/' || tokens[i].type == '=' || tokens[i].type == '!' || tokens[i].type == '&' || tokens[i].type == '|') {
+      if (tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || tokens[i].type == '/' || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == '&' || tokens[i].type == '|') {
         if (operator_priority(tokens[i].type) < main_pri) {
           main_pri = operator_priority(tokens[i].type);
           main_op = i;
@@ -257,8 +257,8 @@ uint32_t eval(int start, int end, bool *success) {
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
-      case '=': return val1 == val2;
-      case '!': return val1 != val2;
+      case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
       case '&': return val1 && val2;
       case '|': return val1 || val2;
       default: assert(0);
