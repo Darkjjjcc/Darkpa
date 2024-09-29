@@ -202,7 +202,7 @@ uint32_t operator_priority(int type) {
 
 uint32_t main_operator(int start, int end) {
   int i, cnt = 0, main_op = -1;
-  uint32_t main_pri = 0;
+  uint32_t main_pri = 10;
   for (i = start; i <= end; i++) {
     if (tokens[i].type == '(') {
       cnt++;
