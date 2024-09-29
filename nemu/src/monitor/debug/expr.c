@@ -189,13 +189,12 @@ uint32_t check_parentheses(int start, int end){
 
 uint32_t operator_priority(int type) {
   switch (type) {
-    case TK_OR: return 1;
-    case TK_AND: return 2;
-    case '!': return 3;
-    case TK_EQ: case TK_NEQ: return 4;
-    case '+': case '-': return 5;
-    case '*': case '/': return 6;
-    case '(': return 7;
+    case '|': return 1;
+    case '&': return 2;
+    case '=': case '!': return 3;
+    case '+': case '-': return 4;
+    case '*': case '/': return 5;
+    case '(': return 6;
     default: return 0;
   }
 }
