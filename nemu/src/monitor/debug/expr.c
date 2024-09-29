@@ -243,6 +243,7 @@ uint32_t eval(int start, int end, bool *success) {
     // Find the dominant operator in the token expression.
     int op = main_operator(start, end);
     if (op == -1) {
+      printf("no main operator found\n");
       *success = false;
       return 0;
     }
