@@ -248,15 +248,18 @@ uint32_t eval(int start, int end, bool *success) {
     }
     uint32_t val1 = eval(start, op - 1, success);
     uint32_t val2 = eval(op + 1, end, success);
+    if (*success == false) {
+      return 0;
+    }
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
-      case '&': return val1 && val2;
-      case '|': return val1 || val2;
-      case '=': return val1 == val2;
-      case '!': return val1 != val2;
+      case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
+      case TK_AND: return val1 && val2;
+      case TK_OR: return val1 || val2;
       default: assert(0);
     }
     
