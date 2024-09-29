@@ -210,7 +210,9 @@ uint32_t main_operator(int start, int end) {
       cnt--;
     }
     if (cnt == 0) {
-      if (tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || tokens[i].type == '/' || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND || tokens[i].type == TK_OR) {
+      if (tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || tokens[i].type == '/' 
+                || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND || tokens[i].type == TK_OR) 
+      {
         if (operator_priority(tokens[i].type) < main_pri) {
           main_pri = operator_priority(tokens[i].type);
           main_op = i;
@@ -251,7 +253,7 @@ uint32_t eval(int start, int end, bool *success) {
     if (*success == false) {
       return 0;
     }
-    printf("now operator is %c\n", tokens[op].type);
+    // printf("now operator is %c\n", tokens[op].type);
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
