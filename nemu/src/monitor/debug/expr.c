@@ -187,8 +187,22 @@ uint32_t check_parentheses(int start, int end){
   return true;
 }
 
-uint32_t dominant_operator(int start, int end) {
-  int i, cnt = 0, pos = -1;
+uint32_t operator_priority(int type) {
+  switch (type) {
+    case TK_OR: return 1;
+    case TK_AND: return 2;
+    case '!': return 3;
+    case TK_EQ: case TK_NEQ: return 4;
+    case '+': case '-': return 5;
+    case '*': case '/': return 6;
+    case '(': return 7;
+    default: return 0;
+  }
+}
+
+uint32_t main_operator(int start, int end) {
+  int i, cnt = 0, main_op = -1;
+  uint32_t main_pri = 0;
   for (i = start; i <= end; i++) {
     if (tokens[i].type == '(') {
       cnt++;
@@ -196,16 +210,16 @@ uint32_t dominant_operator(int start, int end) {
     else if (tokens[i].type == ')') {
       cnt--;
     }
-    else if (cnt == 0) {
-      if (tokens[i].type == '+' || tokens[i].type == '-') {
-        pos = i;
-      }
-      else if (tokens[i].type == '*' || tokens[i].type == '/') {
-        return i;
+    if (cnt == 0) {
+      if (tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || tokens[i].type == '/' || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND || tokens[i].type == TK_OR) {
+        if (operator_priority(tokens[i].type) <= main_pri) {
+          main_pri = operator_priority(tokens[i].type);
+          main_op = i;
+        }
       }
     }
   }
-  return pos;
+  return main_op;
 }
 
 uint32_t eval(int start, int end, bool *success) {
@@ -227,7 +241,7 @@ uint32_t eval(int start, int end, bool *success) {
   }
   else {
     // Find the dominant operator in the token expression.
-    int op = dominant_operator(start, end);
+    int op = main(start, end);
     if (op == -1) {
       *success = false;
       return 0;
