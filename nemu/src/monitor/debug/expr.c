@@ -251,6 +251,7 @@ uint32_t eval(int start, int end, bool *success) {
     if (*success == false) {
       return 0;
     }
+    printf("now operator is %c\n", tokens[op].type);
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
