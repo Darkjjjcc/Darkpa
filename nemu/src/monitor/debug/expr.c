@@ -7,7 +7,7 @@
 #include <regex.h>
 
 
-/* PA1.2 表达式求值_task1: 补充token类型*/
+/* PA1.4 表达式求值_task1_1: 补充token类型*/
 enum {
   TK_NOTYPE = 256,    // spaces
   TK_EQ,              // equal
@@ -17,6 +17,7 @@ enum {
   TK_AND,             // and
   TK_OR,              // or
   TK_REG,             // register
+  TK_DEREF,           // dereference，指针解引用
 
 
   /* TODO: Add more token types */
@@ -31,7 +32,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  /* PA1.2 表达式求值_task2: 补充规则,词法分析
+  /* PA1.4 表达式求值_task1_2: 补充规则,词法分析
    */
 
   {" +", TK_NOTYPE},    // spaces
@@ -103,7 +104,7 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        /* PA1.2 表达式求值_task3: 补充token类型
+        /* PA1.4 表达式求值_task1_3: 补充token类型
          * tokens数组中的每一个元素都是一个token结构体，包含两个成员：
          * 1. type: 表示token的类型，是一个整数，可以是上面定义的TK_NOTYPE、TK_EQ等
          * 2. str: 表示token的字符串，是一个字符数组，用于存储token的字符串
@@ -122,7 +123,7 @@ static bool make_token(char *e) {
           }
           case TK_HEX_NUM:
           {
-          if (substr_len>32) { puts("The length of number is too long!"); return false; }
+            if (substr_len>32) { puts("The length of number is too long!"); return false; }
             tokens[nr_token].type='6';
             strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
             tokens[nr_token].str[substr_len-2]='\0';
@@ -130,7 +131,7 @@ static bool make_token(char *e) {
             break;
           }
 
-          // fractions
+          // brackets
           case '(':
           case ')':
 
@@ -168,6 +169,10 @@ static bool make_token(char *e) {
   return true;
 }
 
+
+/* PA1.4 表达式求值_task2_1: 检查括号匹配
+ * 检查表达式中的括号是否匹配
+*/
 uint32_t check_parentheses(int start, int end){
   if (tokens[start].type != '(' || tokens[end].type != ')') {
     return false;
@@ -187,6 +192,7 @@ uint32_t check_parentheses(int start, int end){
   return true;
 }
 
+// PA1.4 表达式求值_task2_2_1: 定义运算符优先级
 uint32_t operator_priority(int type) {
   switch (type) {
     case TK_OR: return 1;
@@ -199,6 +205,7 @@ uint32_t operator_priority(int type) {
   }
 }
 
+// PA1.4 表达式求值_task2_2_2: 寻找主运算符
 uint32_t main_operator(int start, int end) {
   int i, cnt = 0, main_op = -1;
   uint32_t main_pri = 10;
@@ -223,6 +230,7 @@ uint32_t main_operator(int start, int end) {
   return main_op;
 }
 
+// PA1.4 表达式求值_task2_3: 表达式求值
 uint32_t eval(int start, int end, bool *success) {
   if (start > end) {
     /* Bad expression */
@@ -247,6 +255,14 @@ uint32_t eval(int start, int end, bool *success) {
       // printf("no main operator found\n");
       *success = false;
       return 0;
+    }
+    // PA1.4 表达式求值_task2_4: 补充对指针解引用的处理
+    else if(tokens[op].type == TK_DEREF){
+      uint32_t val = eval(op + 1, end, success);
+      if (*success == false) {
+        return 0;
+      }
+      return vaddr_read(val, 4);
     }
     uint32_t val1 = eval(start, op - 1, success);
     uint32_t val2 = eval(op + 1, end, success);
@@ -275,6 +291,12 @@ uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
+  }
+  // PA1.4 表达式求值_task2_4: 补充对指针解引用的处理
+  for(int i=0;i<nr_token;++i){
+    if(tokens[i].type=='*'&&(i==0||(tokens[i-1].type!=')'&&tokens[i-1].type!='0'&&tokens[i-1].type!='6'&&tokens[i-1].type!='r'))){
+      tokens[i].type=TK_DEREF;
+    }
   }
   *success = true;
   return eval(0, nr_token - 1, success);
