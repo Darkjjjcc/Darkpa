@@ -59,7 +59,7 @@ static int cmd_info(char *args){
     isa_reg_display();
   }
   else if(strcmp(arg, "w") == 0){
-
+    watchpoint_display();
   }
   else{
     printf("Unknown command, please check the subcmd!\n");
@@ -100,6 +100,32 @@ static int cmd_p(char *args) {
   return 0;
 }
 
+static int cmd_w(char *args) {
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    printf("Unknown command, please input the expression!\n");
+    return 0;
+  }
+  WP* wp = new_wp(arg);
+  printf("Set watchpoint %d for %s\n", wp->NO, wp->expr);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    printf("Unknown command, please input the watchpoint number!\n");
+    return 0;
+  }
+  int n = atoi(arg);
+  if(free_wp(n)){
+    printf("Delete watchpoint %d\n", n);
+  }
+  else{
+    printf("No watchpoint %d\n", n);
+  }
+  return 0;
+}
 
 static struct {
   char *name;
@@ -113,6 +139,9 @@ static struct {
   { "info", "Print the state of the program",cmd_info},
   { "x", "Scan memory", cmd_x},
   { "p", "Evaluate the expression", cmd_p},
+  { "w", "Set watchpoint", cmd_w},
+  { "d", "Delete watchpoint", cmd_w},
+
 
   /* TODO: Add more commands */
 
