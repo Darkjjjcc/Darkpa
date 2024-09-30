@@ -239,6 +239,8 @@ uint32_t eval(int start, int end, bool *success) {
   }
   else if (start == end) {
     // Single token.
+    printf("now token is %c\n", tokens[start].type);
+    printf("now token is %s\n", tokens[start].str);
     if(tokens[start].type == '0') return atoi(tokens[start].str);
     else if(tokens[start].type == '6') return strtol(tokens[start].str,NULL,16);
     else if(tokens[start].type == 'r') return isa_reg_str2val(tokens[start].str,success);
