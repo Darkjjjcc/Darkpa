@@ -253,12 +253,13 @@ uint32_t eval(int start, int end, bool *success) {
     }
     else if(tokens[start].type == 'r'){
       result = isa_reg_str2val(tokens[start].str, success);
+      printf("now the address is 0x%x\n", result);
     }
     else assert(0);
     if (*success == false) {
       return 0;
     }
-    printf("now result is %d\n", result);
+    // printf("now result is %d\n", result);
     return result;
   }
   else if (check_parentheses(start, end) == true) {
