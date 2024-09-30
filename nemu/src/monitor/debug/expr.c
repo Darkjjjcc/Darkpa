@@ -109,7 +109,7 @@ static bool make_token(char *e) {
          * 2. str: 表示token的字符串，是一个字符数组，用于存储token的字符串
         */
         switch (rules[i].token_type) {
-		      TK_NOTYPE:break;
+		      // TK_NOTYPE:break;
           case TK_NOTYPE:break;
           case TK_NUM: 
           {
