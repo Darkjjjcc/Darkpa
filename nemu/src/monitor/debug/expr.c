@@ -241,7 +241,7 @@ uint32_t eval(int start, int end, bool *success) {
     // Single token.
     if(tokens[start].type == '0') return atoi(tokens[start].str);
     else if(tokens[start].type == '6') return strtol(tokens[start].str,NULL,16);
-    else if(tokens[start].type == 'r') return isa_reg_str2val(tokens[start].str+1,success);
+    else if(tokens[start].type == 'r') return isa_reg_str2val(tokens[start].str,success);
     else assert(0);
   }
   else if (check_parentheses(start, end) == true) {
