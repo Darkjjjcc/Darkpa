@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <regex.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 
 /* PA1.4 表达式求值_task1_1: 补充token类型*/
