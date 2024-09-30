@@ -239,12 +239,24 @@ uint32_t eval(int start, int end, bool *success) {
   }
   else if (start == end) {
     // Single token.
-    printf("now token is %c\n", tokens[start].type);
+    printf("now token type is %c\n", tokens[start].type);
     printf("now token is %s\n", tokens[start].str);
-    if(tokens[start].type == '0') return atoi(tokens[start].str);
-    else if(tokens[start].type == '6') return strtol(tokens[start].str,NULL,16);
-    else if(tokens[start].type == 'r') return isa_reg_str2val(tokens[start].str,success);
+    int result = 0;
+    if(tokens[start].type == '0'){
+      result = atoi(tokens[start].str);
+    }
+    else if(tokens[start].type == '6'){
+      result = strtol(tokens[start].str, NULL, 16);
+    }
+    else if(tokens[start].type == 'r'){
+      result = isa_reg_str2val(tokens[start].str, success);
+    }
     else assert(0);
+    if (*success == false) {
+      return 0;
+    }
+    printf("now result is %d\n", result);
+    return result;
   }
   else if (check_parentheses(start, end) == true) {
     // The expression is surrounded by a matched pair of parentheses.
