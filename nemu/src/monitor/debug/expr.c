@@ -202,7 +202,7 @@ uint32_t operator_priority(int type) {
     case TK_EQ: case TK_NEQ: return 3;
     case '+': case '-': return 4;
     case '*': case '/': return 5;
-    case '(': return 6;
+    case TK_DEREF: return 6;
     default: return 0;
   }
 }
@@ -220,7 +220,8 @@ uint32_t main_operator(int start, int end) {
     }
     if (cnt == 0) {
       if (tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || tokens[i].type == '/' 
-                || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND || tokens[i].type == TK_OR) 
+                || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ || tokens[i].type == TK_AND || tokens[i].type == TK_OR
+                || tokens[i].type == TK_DEREF) 
       {
         if (operator_priority(tokens[i].type) < main_pri) {
           main_pri = operator_priority(tokens[i].type);
