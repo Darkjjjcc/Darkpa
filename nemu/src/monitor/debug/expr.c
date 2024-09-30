@@ -6,8 +6,7 @@
 #include <sys/types.h>
 #include <regex.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+uint32_t isa_reg_str2val(const char *s, bool *success);
 
 
 /* PA1.4 表达式求值_task1_1: 补充token类型*/
