@@ -242,8 +242,8 @@ uint32_t eval(int start, int end, bool *success) {
   }
   else if (start == end) {
     // Single token.
-    printf("now token type is %c\n", tokens[start].type);
-    printf("now token is %s\n", tokens[start].str);
+    // printf("now token type is %c\n", tokens[start].type);
+    // printf("now token is %s\n", tokens[start].str);
     int result = 0;
     if(tokens[start].type == '0'){
       result = atoi(tokens[start].str);
@@ -252,8 +252,9 @@ uint32_t eval(int start, int end, bool *success) {
       result = strtol(tokens[start].str, NULL, 16);
     }
     else if(tokens[start].type == 'r'){
+      // 注意：这里涉及了寄存器的处理，需要调用isa_reg_str2val函数，该函数需要在nemu/src/isa/riscv32/reg.c中完成对应补充。
       result = isa_reg_str2val(tokens[start].str, success);
-      printf("now the address is 0x%x\n", result);
+      // printf("now the address is 0x%x\n", result);
     }
     else assert(0);
     if (*success == false) {
