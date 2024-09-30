@@ -48,7 +48,7 @@ static struct rule {
   {"\\)", ')'},         // right bracket
   {"&&", TK_AND},       // and
   {"\\|\\|", TK_OR},    // or
-  {"\\$[a-zA-Z]+", TK_REG}, // register
+  {"\\$[0-9a-zA-Z]+", TK_REG}, // register
 
 };
 
