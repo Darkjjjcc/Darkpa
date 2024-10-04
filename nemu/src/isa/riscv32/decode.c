@@ -82,3 +82,13 @@ make_DHelper(B)
   decode_op_i(id_dest, offset, true);
 
 }
+
+// pa2 added for R-type instructions
+make_DHelper(R)
+{
+  decode_op_r(id_src, decinfo.isa.instr.rs1, true);
+  decode_op_r(id_src2, decinfo.isa.instr.rs2, true);
+  print_Dop(id_src->str, OP_STR_SIZE, "%s", reg_name(id_src->reg, 4));
+  print_Dop(id_src2->str, OP_STR_SIZE, "%s", reg_name(id_src2->reg, 4));
+  decode_op_r(id_dest, decinfo.isa.instr.rd, false);
+}
