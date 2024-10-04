@@ -3,7 +3,8 @@
 make_EHelper(lui);
 make_EHelper(auipc);
 
-make_EHelper(addi);
+// make_EHelper(addi);
+make_EHelper(I_ir_4);
 make_EHelper(jalr);
 
 make_EHelper(jal);
