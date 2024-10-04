@@ -1,0 +1,1 @@
+make ALL=dummy run
