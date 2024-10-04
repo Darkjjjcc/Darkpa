@@ -52,6 +52,8 @@ struct ISADecodeInfo {
   Instr instr;
 };
 
+
+// pa2 added for riscv32 instructions
 make_DHelper(U);
 make_DHelper(I);
 make_DHelper(J);
