@@ -151,7 +151,7 @@ make_EHelper(R_opcode_c){
       id_dest->val = (signed)id_src->val < (signed)id_src2->val;
       print_asm_template3(slt);
     }
-    else{ // mulhsu
+    else{                                       // mulhsu
       TODO();
     }
     break;
