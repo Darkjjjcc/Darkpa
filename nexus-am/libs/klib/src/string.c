@@ -61,7 +61,7 @@ void* memcpy(void* out, const void* in, size_t n) {
   for(size_t i = 0;i < n;i++){
     ((char*)out)[i] = ((char*)in)[i];
   }
-  return out;
+  return 0;
 }
 
 int memcmp(const void* s1, const void* s2, size_t n){
