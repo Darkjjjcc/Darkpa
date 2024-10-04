@@ -43,31 +43,18 @@ int strcmp(const char* s1, const char* s2) {
 }
 
 int strncmp(const char* s1, const char* s2, size_t n) {
-  for(size_t i = 0;i < n;i++){
-    if(s1[i] != s2[i]) return s1[i] - s2[i];
-    if(s1[i] == '\0') return 0;
-  }
   return 0;
 }
 
 void* memset(void* v,int c,size_t n) {
-  for(size_t i = 0;i < n;i++){
-    ((char*)v)[i] = c;
-  }
   return NULL;
 }
 
 void* memcpy(void* out, const void* in, size_t n) {
-  for(size_t i = 0;i < n;i++){
-    ((char*)out)[i] = ((char*)in)[i];
-  }
   return NULL;
 }
 
 int memcmp(const void* s1, const void* s2, size_t n){
-  for(size_t i = 0;i < n;i++){
-    if(((char*)s1)[i] != ((char*)s2)[i]) return ((char*)s1)[i] - ((char*)s2)[i];
-  }
   return 0;
 }
 
