@@ -138,12 +138,12 @@ static inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
   // TODO();
-  switch (width) {
-    case 4: *(int32_t*)dest = *(int32_t*)src1; return;
-    case 1: *(int32_t*)dest = *(int8_t*)src1; return;
-    case 2: *(int32_t*)dest = *(int16_t*)src1; return;
-    default: assert(0);
-  }
+  // switch (width) {
+  //   case 4: *(int32_t*)dest = *(int32_t*)src1; return;
+  //   case 1: *(int32_t*)dest = *(int8_t*)src1; return;
+  //   case 2: *(int32_t*)dest = *(int16_t*)src1; return;
+  //   default: assert(0);
+  // }
 }
 
 static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
