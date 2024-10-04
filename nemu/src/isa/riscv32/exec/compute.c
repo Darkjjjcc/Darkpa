@@ -29,10 +29,10 @@ make_EHelper(I_ir_4) {
       rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
       break;
     case 0b010: // slti
-      rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
+      id_dest->val = (int32_t)id_src->val < (int32_t)id_src2->val;
       break;
     case 0b011: // sltiu
-      rtl_setrelop(RELOP_LTU, &id_dest->val, &id_src->val, &id_src2->val);
+      id_dest->val = (unsigned)id_src->val < (unsigned)id_src2->val;
       break;
     case 0b100: // xori
       rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
