@@ -15,7 +15,7 @@ for file in "$FILE_DIR"/*; do
         pushd "$MAKE_DIR" > /dev/null
         
         # 5. 执行 make run，并将文件的路径传递给 Makefile
-        make run FILE="$file"
+        make ALL="$file" run
         
         # 6. 检查 make run 的结果
         if [[ $? -ne 0 ]]; then
