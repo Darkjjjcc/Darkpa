@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ISA=${1#*ISA=}
+ISA=riscv32
 nemu=build/$ISA-nemu
 
 echo "compiling NEMU..."
