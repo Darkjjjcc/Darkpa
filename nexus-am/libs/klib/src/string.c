@@ -14,7 +14,7 @@ char *strcpy(char* dst,const char* src) {
     dst[i] = src[i];
     if(src[i] == '\0') return dst;
   }
-  return NULL;
+  return dst;
 }
 
 char* strncpy(char* dst, const char* src, size_t n) {
@@ -22,7 +22,7 @@ char* strncpy(char* dst, const char* src, size_t n) {
     dst[i] = src[i];
     if(src[i] == '\0') return dst;
   }
-  return NULL;
+  return dst;
 }
 
 char* strcat(char* dst, const char* src) {
@@ -31,7 +31,7 @@ char* strcat(char* dst, const char* src) {
     dst[len + i] = src[i];
     if(src[i] == '\0') return dst;
   }
-  return NULL;
+  return dst;
 }
 
 int strcmp(const char* s1, const char* s2) {
@@ -68,8 +68,7 @@ int memcmp(const void* s1, const void* s2, size_t n){
   const unsigned char *p1 = (const unsigned char *)s1;  
   const unsigned char *p2 = (const unsigned char *)s2;  
 
-  while (n--) {  
-      // 比较当前字节  
+  while (n--) {
       if (*p1 != *p2) {  
           return (int)(*p1 - *p2);  
       }  
