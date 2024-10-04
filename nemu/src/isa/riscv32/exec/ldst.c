@@ -24,8 +24,8 @@ make_EHelper(st) {
 }
 
 make_EHelper(lh){
-  rtl_lm(&s0,&id_src->addr,decinfo.width);
-  rtl_sext(&s1,&s0,decinfo.width);
+  rtl_lm(&s0, &id_src->addr, decinfo.width);
+  rtl_sext(&s1, &s0, decinfo.width);
   rtl_sr(id_dest->reg,&s1,4);
   print_asm_template2(lh);
 }
