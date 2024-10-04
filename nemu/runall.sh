@@ -25,7 +25,7 @@ ori_log="build/nemu-log.txt"
 for file in $files; do
   base=`basename $file | sed -e "s/-$ISA-nemu.bin//"`
   printf "[%14s] " $base
-  logfile=$base-log.txt
+  logfile=./res/$base-log.txt
   make ISA=$ISA run ARGS="-b -l $ori_log $file" &> $logfile
 
   if (grep 'nemu: .*HIT GOOD TRAP' $logfile > /dev/null) then
