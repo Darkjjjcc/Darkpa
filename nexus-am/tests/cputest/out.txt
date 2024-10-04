@@ -326,3 +326,41 @@ nemu: [1;31mABORT[0m at pc = 0x80100080
 + LD -> build/hello-str-riscv32-nemu.elf
 + OBJCOPY -> build/hello-str-riscv32-nemu.bin
 Building riscv32-nemu
+[1;34m[src/monitor/monitor.c,48,load_img] The image is /home/hust/pa/ics2019/nexus-am/tests/cputest/build/hello-str-riscv32-nemu.bin[0m
+[1;34m[src/memory/memory.c,16,register_pmem] Add 'pmem' at [0x80000000, 0x87ffffff][0m
+[1;34m[src/monitor/monitor.c,20,welcome] Debug: [1;32mON[0m[0m
+[1;34m[src/monitor/monitor.c,21,welcome] If debug mode is on, A log file will be generated to record every instruction NEMU executes. This may lead to a large log file. If it is not necessary, you can turn it off in include/common.h.[0m
+[1;34m[src/monitor/monitor.c,28,welcome] Build time: 17:51:48, Sep 18 2024[0m
+Welcome to [1;41m[1;33mriscv32[0m-NEMU!
+For help, type "help"
+invalid opcode(PC = 0x80100010): 00050463 00008067 ...
+
+There are two cases which will trigger this unexpected exception:
+1. The instruction at PC = 0x80100010 is not implemented.
+2. Something is implemented incorrectly.
+Find this PC(0x80100010) in the disassembling result to distinguish which case it is.
+
+[1;31mIf it is the first case, see
+       _                         __  __                         _ 
+      (_)                       |  \/  |                       | |
+  _ __ _ ___  ___ ________   __ | \  / | __ _ _ __  _   _  __ _| |
+ | '__| / __|/ __|______\ \ / / | |\/| |/ _` | '_ \| | | |/ _` | |
+ | |  | \__ \ (__        \ V /  | |  | | (_| | | | | |_| | (_| | |
+ |_|  |_|___/\___|        \_/   |_|  |_|\__,_|_| |_|\__,_|\__,_|_|
+
+for more details.
+
+If it is the second case, remember:
+* The machine is always right!
+* Every line of untested code is always wrong![0m
+
+nemu: [1;31mABORT[0m at pc = 0x80100010
+
+[1;34m[src/monitor/cpu-exec.c,29,monitor_statistic] total guest instructions = 38[0m
+# Building quick-sort [riscv32-nemu] with AM_HOME {/home/hust/pa/ics2019/nexus-am}
+# Building lib-am [riscv32-nemu]
+# Building lib-klib [riscv32-nemu]
+# Creating binary image [riscv32-nemu]
++ LD -> build/quick-sort-riscv32-nemu.elf
++ OBJCOPY -> build/quick-sort-riscv32-nemu.bin
+Building riscv32-nemu
