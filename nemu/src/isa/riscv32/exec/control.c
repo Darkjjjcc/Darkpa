@@ -27,27 +27,27 @@ make_EHelper(B_ir_18){
   decinfo.jmp_pc = cpu.pc + id_dest->val;
   switch(decinfo.isa.instr.funct3){
     case 0b000:     // beq||beqz
-      rtl_jrelop(RELOP_EQ, id_src->val, id_src2->val, decinfo.jmp_pc);
+      rtl_jrelop(RELOP_EQ, &id_src->val, &id_src2->val, decinfo.jmp_pc);
       print_asm_template3(beq);
       break;
     case 0b001:     // bne||bnez
-      rtl_jrelop(RELOP_NE, id_src->val, id_src2->val, decinfo.jmp_pc);
+      rtl_jrelop(RELOP_NE, &id_src->val, &id_src2->val, decinfo.jmp_pc);
       print_asm_template3(bne);
       break;
     case 0b100:     // blt||bltz
-      rtl_jrelop(RELOP_LT, id_src->val, id_src2->val, decinfo.jmp_pc);
+      rtl_jrelop(RELOP_LT, &id_src->val, &id_src2->val, decinfo.jmp_pc);
       print_asm_template3(blt);
       break;
     case 0b101:     // bge||bgez
-      rtl_jrelop(RELOP_GE, id_src->val, id_src2->val, decinfo.jmp_pc);
+      rtl_jrelop(RELOP_GE, &id_src->val, &id_src2->val, decinfo.jmp_pc);
       print_asm_template3(bge);
       break;
     case 0b110:     // bltu
-      rtl_jrelop(RELOP_LTU, id_src->val, id_src2->val, decinfo.jmp_pc);
+      rtl_jrelop(RELOP_LTU, &id_src->val, &id_src2->val, decinfo.jmp_pc);
       print_asm_template3(bltu);
       break;
     case 0b111:   // bgeu
-      rtl_jrelop(RELOP_GEU, id_src->val, id_src2->val, decinfo.jmp_pc);
+      rtl_jrelop(RELOP_GEU, &id_src->val, &id_src2->val, decinfo.jmp_pc);
       print_asm_template3(bgeu);
       break;
     default:
