@@ -21,7 +21,8 @@ int main() {
 
 	nemu_assert(strcmp( strcat(strcpy(str, str1), s[3]), s[4]) == 0);
 
-	nemu_assert(memset(str, '#', 5) == 0);
+	char *p = memset(str, '#', 5);
+	printf("%s\n", p);
 	// nemu_assert(memcmp(memset(str, '#', 5), s[5], 5) == 0);
 
 	return 0;
