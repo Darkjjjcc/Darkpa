@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # 1. 定义文件所在的文件夹
-FILE_DIR="./tests"  # 文件所在的文件夹
+FILE_DIR="/home/hust/pa/ics2019/nexus-am/tests/cputest/tests"  # 文件所在的文件夹
 
 # 2. 定义 Makefile 所在的文件夹
-MAKE_DIR=""  # Makefile 所在的目录
+MAKE_DIR="/home/hust/pa/ics2019/nexus-am/tests/cputest"  # Makefile 所在的目录
 
 # 3. 遍历文件夹中的所有文件
 for file in "$FILE_DIR"/*; do
