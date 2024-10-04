@@ -65,23 +65,17 @@ void* memcpy(void* out, const void* in, size_t n) {
 }
 
 int memcmp(const void* s1, const void* s2, size_t n){
-  // 将 void* 指针转换为 unsigned char* 指针，以便按字节访问  
   const unsigned char *p1 = (const unsigned char *)s1;  
   const unsigned char *p2 = (const unsigned char *)s2;  
 
-  // 遍历指定的字节数  
   while (n--) {  
       // 比较当前字节  
       if (*p1 != *p2) {  
-          // 如果发现不同的字节，则返回它们的差值（按无符号字符计算）  
-          // 注意：这里实际上返回的是差值的符号，因为 C 语言中整数运算的符号扩展  
           return (int)(*p1 - *p2);  
       }  
-      // 移动到下一个字节  
       p1++;  
       p2++;  
   }  
-  // 如果所有比较的字节都相同，则返回 0 
   return 0;
 }
 
