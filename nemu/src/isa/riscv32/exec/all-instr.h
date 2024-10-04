@@ -4,12 +4,12 @@ make_EHelper(lui);
 make_EHelper(auipc);
 
 // make_EHelper(addi);
-make_EHelper(I_ir_4);
+make_EHelper(Imm);
 make_EHelper(jalr);
-make_EHelper(R_opcode_c);
+make_EHelper(Reg_2);
 
 make_EHelper(jal);
-make_EHelper(B_ir_18);
+make_EHelper(Branch);
 
 
 make_EHelper(ld);

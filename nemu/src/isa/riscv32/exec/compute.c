@@ -23,7 +23,7 @@ make_EHelper(auipc) {
 // }
 
 // PA2.2 I-type instructions
-make_EHelper(I_ir_4) {
+make_EHelper(Imm) {
   switch (decinfo.isa.instr.funct3) {
     case 0b000: // addi
       rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
@@ -66,7 +66,7 @@ make_EHelper(I_ir_4) {
 }
 
 // PA2.2 R-type instructions
-make_EHelper(R_opcode_c){
+make_EHelper(Reg_2){
   switch (decinfo.isa.instr.funct3){
   case 0b000: {
     if(decinfo.isa.instr.funct7 == 0x00){       // add

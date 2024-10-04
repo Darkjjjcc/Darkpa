@@ -23,7 +23,7 @@ make_EHelper(jalr){
 }
 
 // PA2.2 B-type instructions
-make_EHelper(B_ir_18){
+make_EHelper(Branch){
   decinfo.jmp_pc = cpu.pc + id_dest->val;
   switch(decinfo.isa.instr.funct3){
     case 0b000:     // beq||beqz
