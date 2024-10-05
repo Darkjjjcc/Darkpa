@@ -29,46 +29,6 @@ make_DHelper(U) {
   print_Dop(id_src->str, OP_STR_SIZE, "0x%x", decinfo.isa.instr.imm31_12);
 }
 
-make_DHelper(I){
-  decode_op_r(id_src,decinfo.isa.instr.rs1,true);
-  decode_op_i(id_src2,decinfo.isa.instr.simm11_0,true);
-
-  print_Dop(id_src->str,OP_STR_SIZE,"0x%x",decinfo.isa.instr.rs1);
-  print_Dop(id_src2->str,OP_STR_SIZE,"0x%x",decinfo.isa.instr.simm11_0);
-
-  decode_op_r(id_dest,decinfo.isa.instr.rd,false);
-}
-
-make_DHelper(J){
-  int32_t offset=(decinfo.isa.instr.simm20<<20)|(decinfo.isa.instr.imm19_12<<12)|(decinfo.isa.instr.imm11_<<11)|(decinfo.isa.instr.imm10_1<<1);
-  decode_op_i(id_src,offset,true);
-
-  print_Dop(id_src->str,OP_STR_SIZE,"0x%x",offset);
-
-  decode_op_r(id_dest,decinfo.isa.instr.rd,false);
-}
-
-make_DHelper(B){
-  decode_op_r(id_src,decinfo.isa.instr.rs1,true);
-  decode_op_r(id_src2,decinfo.isa.instr.rs2,true);
-
-  print_Dop(id_src->str,OP_STR_SIZE,"0x%x",decinfo.isa.instr.rs1);
-  print_Dop(id_src2->str,OP_STR_SIZE,"0x%x",decinfo.isa.instr.rs2);
-
-  int32_t offset=(decinfo.isa.instr.simm12<<12)|(decinfo.isa.instr.imm11<<11)|(decinfo.isa.instr.imm10_5<<5)|(decinfo.isa.instr.imm4_1<<1);
-  decode_op_i(id_dest,offset,true);
-}
-
-make_DHelper(R){
-  decode_op_r(id_src,decinfo.isa.instr.rs1,true);
-  decode_op_r(id_src2,decinfo.isa.instr.rs2,true);
-
-  print_Dop(id_src->str,OP_STR_SIZE,"0x%x",decinfo.isa.instr.rs1);
-  print_Dop(id_src2->str,OP_STR_SIZE,"0x%x",decinfo.isa.instr.rs2);
-
-  decode_op_r(id_dest,decinfo.isa.instr.rd,false);
-}
-
 make_DHelper(ld) {
   decode_op_r(id_src, decinfo.isa.instr.rs1, true);
   decode_op_i(id_src2, decinfo.isa.instr.simm11_0, true);
@@ -87,7 +47,53 @@ make_DHelper(st) {
 
   print_Dop(id_src->str, OP_STR_SIZE, "%d(%s)", id_src2->val, reg_name(id_src->reg, 4));
 
+  // printf("at st_decoder, now src->val is %x\n", id_src->val);
+  // printf("at st_decoder, now src2->val is %x\n", id_src2->val);
+
   rtl_add(&id_src->addr, &id_src->val, &id_src2->val);
+  // printf("at st_decoder, now src->addr is %x\n", id_src->addr);
 
   decode_op_r(id_dest, decinfo.isa.instr.rs2, true);
+}
+
+// pa2 added for I-type instructions
+make_DHelper(I) 
+{
+  decode_op_r(id_src, decinfo.isa.instr.rs1, true);
+  decode_op_i(id_src2, decinfo.isa.instr.simm11_0, true);
+  print_Dop(id_src->str, OP_STR_SIZE, "%d(%s)", id_src2->val, reg_name(id_src->reg, 4));
+  decode_op_r(id_dest, decinfo.isa.instr.rd, false);
+}
+
+// pa2 added for J-type instructions
+make_DHelper(J){
+  int32_t offset=(decinfo.isa.instr.simm20<<20)|(decinfo.isa.instr.imm19_12<<12)|(decinfo.isa.instr.imm11_<<11)|(decinfo.isa.instr.imm10_1<<1);
+  decode_op_i(id_src,offset,true);
+
+  print_Dop(id_src->str,OP_STR_SIZE,"0x%x",offset);
+
+  decode_op_r(id_dest,decinfo.isa.instr.rd,false);
+}
+
+// pa2 added for B-type instructions
+make_DHelper(B)
+{
+  decode_op_r(id_src, decinfo.isa.instr.rs1, true);
+  decode_op_r(id_src2, decinfo.isa.instr.rs2, true);
+  print_Dop(id_src->str, OP_STR_SIZE, "%s", reg_name(id_src->reg, 4));
+  print_Dop(id_src2->str, OP_STR_SIZE, "%s", reg_name(id_src2->reg, 4));
+
+  int32_t offset = decinfo.isa.instr.simm12<<12 | decinfo.isa.instr.imm10_5<<5 | decinfo.isa.instr.imm4_1<<1 | decinfo.isa.instr.imm11<<11;
+  decode_op_i(id_dest, offset, true);
+
+}
+
+// pa2 added for R-type instructions
+make_DHelper(R)
+{
+  decode_op_r(id_src, decinfo.isa.instr.rs1, true);
+  decode_op_r(id_src2, decinfo.isa.instr.rs2, true);
+  print_Dop(id_src->str, OP_STR_SIZE, "%s", reg_name(id_src->reg, 4));
+  print_Dop(id_src2->str, OP_STR_SIZE, "%s", reg_name(id_src2->reg, 4));
+  decode_op_r(id_dest, decinfo.isa.instr.rd, false);
 }
