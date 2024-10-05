@@ -6,6 +6,7 @@ make_EHelper(jal){
   rtl_sr(id_dest->reg, &addr, 4);
 
   rtl_add(&decinfo.jmp_pc, &cpu.pc, &id_src->val);
+  printf("jal: decinfo.jmp_pc = %x\n", decinfo.jmp_pc);
   rtl_j(decinfo.jmp_pc);
 
   print_asm_template2(jal);
