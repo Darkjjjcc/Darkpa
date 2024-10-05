@@ -13,7 +13,7 @@ make_EHelper(auipc){
   print_asm_template2(auipc);
 }
 
-make_EHelper(imm){
+make_EHelper(Imm){
   switch(decinfo.isa.instr.funct3){
     case 0: //addi
       rtl_add(&id_dest->val,&id_src->val,&id_src2->val);
@@ -65,7 +65,7 @@ make_EHelper(imm){
   }
 }
 
-make_EHelper(reg){
+make_EHelper(Reg_2){
   switch(decinfo.isa.instr.funct3){
     case 0: //add&&sub&&mul
       if(decinfo.isa.instr.funct7==0b0000000){ //add
