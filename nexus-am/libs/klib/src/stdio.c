@@ -16,84 +16,85 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-    int count = 0, flag = 0, fmtnum = 0;
-    char tmpc[30], sflag;
-    char *tmp;
-    int inte;
-    int i = 0, j = 0, k;
-
-    for(;fmt[i];i++){
-        if(flag){
-            flag = 0;
-            if(fmt[i]>='0' && fmt[i]<='9'){
-                fmtnum *= 10;
-                fmtnum += fmt[i]-'0';
-                flag = 1;
-                continue;
-            }
-            switch(fmt[i]){
-                case 's':
-                    tmp = va_arg(ap,char*);
-                    if(fmtnum > strlen(tmp)){
-                        for(int a = 0; a < fmtnum-strlen(tmp);a++){
-                            out[j] = ' ';
-                            j++;
-                        }
-                    }
-                    strcat(out+j, tmp);
-                    j += strlen(tmp);
-                    count++;
-                    break;
-                case 'd':
-                    inte = va_arg(ap, int);
-                    k = 0;
-                    sflag = inte < 0;
-                    inte = inte *(sflag?-1:1);
-                    if(sflag){
-                        out[j] = '-';
-                        j++;
-                    }
-                    do{
-                        tmpc[k] = inte % 10;
-                        inte /= 10;
-                        k++;
-                    }while(inte);
-                    if(fmtnum > k){
-                        for(int l = 0; l < fmtnum-k;l++){
-                            out[j] = ' ';
-                            j++;
-                        }
-                    }
-                    for(int l = 0; l < k;l++){
-                        out[j+l] = tmpc[k-1-l] + '0';
-                    }
-                    j+=k;
-                    count++;
-                    break;
-                    //TODO: deal with '%'
-                default:
-                    assert(0 && "Unfinish stdio");
-            }
-            continue;
-        }
-        if(fmt[i] == '%'){
-            flag = 1;
-            fmtnum = 0;
-            continue;
-        }
-        out[j] = fmt[i];
-        j++;
+  char *temp=out;
+  while(*fmt!='\0'){
+    if(*fmt!='%'){
+      *temp++=*fmt++;
     }
-    out[j] = 0;
-    return count;
+    else{
+      fmt++;
+      switch(*fmt){
+        case 's':{
+          char *str=va_arg(ap,char*);
+          while(*str!='\0'){
+            *temp++=*str++;
+          }
+          break;
+        }
+        case 'd':{
+          int n=va_arg(ap,int);
+          if(n==0){
+            *temp++='0';
+            break;
+          }
+          if(n<0){
+            *temp++='-';
+            n=-n;
+          }
+          char buf[11];
+          int i=0;
+          while(n!=0){
+            buf[i++]=n%10+'0';
+            n=n/10;
+          }
+          for(int j=i-1;j>=0;j--){
+            *temp++=buf[j];
+          }
+          break;
+        }
+        case 'x':{
+          int n=va_arg(ap,int);
+          if(n==0){
+            *temp++='0';
+            *temp++='x';
+            *temp++='0';
+            break;
+          }
+          if(n<0){
+            *temp++='-';
+            n=-n;
+          }
+          char buf[12];
+          int i=0;
+          while(n!=0){
+            int a=n%16;
+            if(a<10)
+              buf[i++]=a+'0';
+            else
+              buf[i++]=a-10+'a';
+            n=n/16;
+          }
+          *temp++='0';
+          *temp++='x';
+          for(int j=i-1;j>=0;j--){
+            *temp++=buf[j];
+          }
+          break;
+        }
+      }
+      fmt++;
+    }
+  }
+  *temp='\0';
+  return temp-out;
 }
 
 int sprintf(char *out, const char *fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-    int count = vsprintf(out, fmt, ap);
-    va_end(ap);
-    return count;
+  va_list ap;
+  va_start(ap,fmt);
+  int length=vsprintf(out,fmt,ap);
+  va_end(ap);
+  return length;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
