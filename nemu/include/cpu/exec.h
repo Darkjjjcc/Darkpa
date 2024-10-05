@@ -38,11 +38,9 @@ static inline uint32_t instr_fetch(vaddr_t *pc, int len) {
 
 /* Instruction Decode and EXecute */
 static inline void idex(vaddr_t *pc, OpcodeEntry *e) {
+  printf("e is %s\n", e->decode == NULL ? "NULL" : "NOT NULL");
   if (e->decode)
     e->decode(pc);
-  // printf("at idex, now pc is %x\n", cpu.pc);
-  else
-    printf("at idex, now e->decode is %x\n", e->decode);
   e->execute(pc);
 }
 
