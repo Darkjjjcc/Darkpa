@@ -15,6 +15,7 @@ make_EHelper(ld) {
 make_EHelper(st) {
   rtl_sm(&id_src->addr, &id_dest->val, decinfo.width);
   printf("now width is %d\n", decinfo.width);
+  printf("now instr is %x\n", decinfo.isa.instr.val);
 
   switch (decinfo.width) {
     case 4: print_asm_template2(sw); break;
