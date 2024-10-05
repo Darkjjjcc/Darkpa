@@ -15,6 +15,8 @@ make_EHelper(ld) {
 
 make_EHelper(st) {
   printf("test at st_executor, now pc is %x\n", cpu.pc);
+  printf("now src is %x\n", id_src->val);
+  printf("now dest is %x\n", id_dest->val);
   rtl_sm(&id_src->addr, &id_dest->val, decinfo.width);
 
   switch (decinfo.width) {
