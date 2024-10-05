@@ -19,6 +19,7 @@ static make_EHelper(store) {
   // printf("now width is %d\n", decinfo.width);
   // printf("now instr is %x\n", decinfo.isa.instr.val);
   printf("at exec_store, now pc is %x\n", cpu.pc);
+  printf("at exec_store, now funct3 is %d\n", decinfo.isa.instr.funct3);
   idex(pc, &store_table[decinfo.isa.instr.funct3]);
 }
 

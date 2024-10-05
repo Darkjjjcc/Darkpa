@@ -3,7 +3,7 @@
 make_EHelper(ld) {
   rtl_lm(&s0, &id_src->addr, decinfo.width);
   rtl_sr(id_dest->reg, &s0, 4);
-  printf("test at ld_decoder, now pc is %x\n", cpu.pc);
+  // printf("test at ld_decoder, now pc is %x\n", cpu.pc);
 
   switch (decinfo.width) {
     case 4: print_asm_template2(lw); break;
