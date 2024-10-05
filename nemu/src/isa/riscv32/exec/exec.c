@@ -16,6 +16,9 @@ static OpcodeEntry store_table [8] = {
 
 static make_EHelper(store) {
   decinfo.width = store_table[decinfo.isa.instr.funct3].width;
+  // printf("now width is %d\n", decinfo.width);
+  printf("now instr is %x\n", decinfo.isa.instr.val);
+  printf("now pc is %x\n", cpu.pc);
   idex(pc, &store_table[decinfo.isa.instr.funct3]);
 }
 
