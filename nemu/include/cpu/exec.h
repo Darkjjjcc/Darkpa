@@ -41,7 +41,7 @@ static inline void idex(vaddr_t *pc, OpcodeEntry *e) {
   if (e->decode)
     e->decode(pc);
   printf("at idex, now pc is %x\n", cpu.pc);
-  // printf("now expression is %x\n", decinfo.isa.instr.val);
+  printf("at idex, now e->execute is %x\n", e->execute);
   e->execute(pc);
 }
 
