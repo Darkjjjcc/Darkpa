@@ -5,7 +5,7 @@
 
 
 void add_string(char **s, char *str);
-void add_char(char *s, char c);
+void add_char(char **s, char c);
 void add_number(char **s, int num);
 void add_special_number(char **s, const char *fmt, va_list ap,char c);
 
@@ -93,8 +93,9 @@ void add_string(char **s, char *str) {
   }
 }
 
-void add_char(char *s, char c) {
-  *s++ = c;
+void add_char(char **s, char c) {
+  **s = c;
+  (*s)++;
 }
 
 void add_number(char **s, int num) {
@@ -126,7 +127,7 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
   char temp[100];
   int i = 0;
   while (num) {
-    temp[i++] = num % 10 + '0';
+    i++;
     num /= 10;
   }
   if(i<num_of_digit){
@@ -135,10 +136,8 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
       (*s)++;
     }
   }
-  while(i--) {
-    add_char(*s, temp[i]);
-    (*s)++;
-  }
+  add_number(s,num);
+
 
 }
 
