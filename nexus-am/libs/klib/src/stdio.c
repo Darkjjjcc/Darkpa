@@ -81,30 +81,6 @@ static char *number(char *str, long num, int base, int size, int precision, int 
     }
   }
 
-  if (i > precision)
-    precision = i;
-  size -= precision;
-  if (!(type & (ZEROPAD | LEFT))) {
-    while (size-- > 0)
-      *str++ = ' ';
-  }
-  if (sign)
-    *str++ = sign;
-
-  if (type & SPECIAL) {
-    if (8 == base) {
-      *str++ = '0';
-    }
-    else if (16 == base) {
-      *str++ = '0';
-      *str++ = digits[33];
-    }
-  }
-
-  if (!(type & LEFT)) {
-    while (size-- > 0)
-      *str++ = c;
-  }
   while (i < precision--)
     *str++ = '0';
   while (i-- > 0)
@@ -277,24 +253,17 @@ int vsprintf(char *buf, const char *fmt, va_list args)
     } /*end of switch(*fmt)*/
 
     if (qualifier == 'l')
-    {
       num = va_arg(args, unsigned long);
-    }
-    else if (qualifier == 'h')
-    {
+    else if (qualifier == 'h') {
       if (flags & SIGN)
         num = va_arg(args, int);
       else
         num = va_arg(args, unsigned);
     }
     else if (flags & SIGN)
-    {
       num = va_arg(args, int);
-    }
     else
-    {
       num = va_arg(args, unsigned long);
-    }
 
     str = number(str, num, base, field_width, precision, flags);
   } 
