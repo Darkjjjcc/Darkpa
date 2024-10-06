@@ -107,8 +107,7 @@ void add_number(char **s, int num) {
   char temp[100];
   int i = 0;
   if(num<0){
-    add_char(*s,'-');
-    (*s)++;
+    add_char(s,'-');
     num=-num;
   }
   while (num) {
@@ -117,8 +116,7 @@ void add_number(char **s, int num) {
     i++;
   }
   for (int j = i - 1; j >= 0; j--) {
-    add_char(*s, temp[j]);
-    (*s)++;
+    add_char(s, temp[j]);
   }
 }
 
@@ -138,8 +136,7 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
   }
   if(i<num_of_digit){
     for(int j=0;j<num_of_digit-i;j++){
-      add_char(*s,c);
-      (*s)++;
+      add_char(s,c);
     }
   }
   add_number(s,num);
