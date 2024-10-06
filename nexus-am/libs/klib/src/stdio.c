@@ -3,105 +3,117 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-int printf(const char *fmt, ...) {
-	char buf[128] = {'\0'};
-	va_list args;
-	int n;
+#define MAX_SIZE 4096
 
-	va_start(args, fmt);
-	n = vsprintf(buf, fmt, args);
-	for(size_t i=0;i<128;i++){
-		if(buf[i]=='\0')	break;
-		else _putc(buf[i]);
-	}
-	va_end(args);
-	return n;
+
+void puts_helper(const char* string,int ptr){
+  int i;
+  if(ptr<0){
+    for(i=0;string[i];++i)_putc(string[i]);
+  }else{
+    for(i=0;i<ptr;++i)_putc(string[i]);
+  }
+}
+
+int printf(const char *fmt, ...) {
+  va_list ap;
+  va_start(ap,fmt);
+  char buffer[MAX_SIZE];
+  int ptr = vsprintf(buffer,fmt,ap);
+  puts_helper(buffer,ptr);
+  va_end(ap);
+  return 0;
+}
+
+int itoa_helper(char *out, int ptr, uint32_t valint, int base){
+  assert(valint>=0);
+  int stack[128],sptr=0;
+  if(valint==0)out[ptr++]='0';
+  else{
+    for(;valint;stack[sptr++]=valint%base,valint=valint/base);
+    for(--sptr;sptr>=0;--sptr){
+      if(stack[sptr]<10)out[ptr++]=stack[sptr]+'0';
+      else if(stack[sptr]<16)out[ptr++]=stack[sptr]-10+'a';
+      else{
+        assert(0);
+      }
+    }
+  }
+  return ptr;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  char *temp=out;
-  while(*fmt!='\0'){
-    if(*fmt!='%'){
-      *temp++=*fmt++;
-    }
+  int ptr=0;
+  for(;*fmt;++fmt){
+    if(*fmt!='%')out[ptr++]=*fmt;
     else{
-      fmt++;
-      switch(*fmt){
-        case 's':{
-          char *str=va_arg(ap,char*);
-          while(*str!='\0'){
-            *temp++=*str++;
-          }
+      switch(*(++fmt)){
+        case 'c':{
+          char c = va_arg(ap,int);
+          out[ptr++]=c;
           break;
         }
         case 'd':{
-          int n=va_arg(ap,int);
-          if(n==0){
-            *temp++='0';
-            break;
+          int valint=va_arg(ap,int);
+          if(valint<0){
+            out[ptr++]='-';
+            valint=-valint;
           }
-          if(n<0){
-            *temp++='-';
-            n=-n;
-          }
-          char buf[11];
-          int i=0;
-          while(n!=0){
-            buf[i++]=n%10+'0';
-            n=n/10;
-          }
-          for(int j=i-1;j>=0;j--){
-            *temp++=buf[j];
-          }
+          ptr = itoa_helper(out,ptr,valint,10);
           break;
         }
         case 'x':{
-          int n=va_arg(ap,int);
-          if(n==0){
-            *temp++='0';
-            *temp++='x';
-            *temp++='0';
-            break;
+          uint32_t valint=va_arg(ap,uint32_t);
+          ptr = itoa_helper(out,ptr,valint,16);
+          break;
+        }
+        case 's':{
+          const char* valstr=va_arg(ap,char*);
+          for(;*valstr;out[ptr++]=*valstr++);
+          break;
+        }
+        case 'f':{
+          float valflt=va_arg(ap,float);
+          if(valflt<0){
+            out[ptr++]='-';
+            valflt=-valflt;
           }
-          if(n<0){
-            *temp++='-';
-            n=-n;
-          }
-          char buf[12];
-          int i=0;
-          while(n!=0){
-            int a=n%16;
-            if(a<10)
-              buf[i++]=a+'0';
-            else
-              buf[i++]=a-10+'a';
-            n=n/16;
-          }
-          *temp++='0';
-          *temp++='x';
-          for(int j=i-1;j>=0;j--){
-            *temp++=buf[j];
-          }
+          int tmpint=(int)valflt;
+          int tmpflt=(int)(10000*(valflt-tmpint));
+          ptr=itoa_helper(out,ptr,tmpint,10);
+          out[ptr++]='.';
+          ptr=itoa_helper(out,ptr,tmpflt,10);
+          break;
+        }
+        default:{
+          out[ptr++]='%';
+          out[ptr++]=*fmt;
           break;
         }
       }
-      fmt++;
     }
   }
-  *temp='\0';
-  return temp-out;
+  out[ptr]=0;
+  return ptr;
 }
 
 int sprintf(char *out, const char *fmt, ...) {
   va_list ap;
   va_start(ap,fmt);
-  int length=vsprintf(out,fmt,ap);
+
+  int ptr=vsprintf(out,fmt,ap);
+
   va_end(ap);
-  return length;
+  return ptr;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
-  return 0;
+  va_list arg;
+  va_start(arg,fmt);
+  vsprintf(out,fmt,arg);
+  out[n]=0;
+  va_end(arg);
+  return n;
 }
 
 #endif
