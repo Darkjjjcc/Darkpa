@@ -133,10 +133,9 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
     i++;
     num /= 10;
   }
-  if(i<num_of_digit){
-    for(int j=0;j<num_of_digit-i;j++){
-      add_char(s,c);
-    }
+  int x = num_of_digit - i;
+  for (int j = 0; j < x; j++) {
+    add_char(s, c);
   }
   add_number(s,num);
 
