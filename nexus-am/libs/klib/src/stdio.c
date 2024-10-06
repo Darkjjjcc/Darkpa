@@ -47,37 +47,48 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  char *s = out;
+  char *temp = out;
   int len = 0;
   while(*fmt) {
     if(*fmt == '%') 
-      *s++ = *fmt++;
+      *temp++ = *fmt++;
     else {
       fmt++;
       switch(*fmt) {
         case 's': {
           char *str = va_arg(ap, char *);
-          add_string(s, str);
+          add_string(temp, str);
           break;
         }
         case 'd': {
+          int num = va_arg(ap, int);
+          add_number(temp, num);
+          break;
+        }
+        case 'x':{
           int n=va_arg(ap,int);
           if(n==0){
-            *s++='0';
+            add_string(temp,"0x0");
             break;
           }
           if(n<0){
-            *s++='-';
+            *temp++='-';
             n=-n;
           }
-          char buf[11];
+          char buf[12];
           int i=0;
           while(n!=0){
-            buf[i++]=n%10+'0';
-            n=n/10;
+            int a=n%16;
+            if(a<10)
+              buf[i++]=a+'0';
+            else
+              buf[i++]=a-10+'a';
+            n=n/16;
           }
+          *temp++='0';
+          *temp++='x';
           for(int j=i-1;j>=0;j--){
-            *s++=buf[j];
+            *temp++=buf[j];
           }
           break;
         }
