@@ -141,29 +141,7 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
     add_number(s,num);
   }
   else if(*fmt == 'x'){
-    while (num) {
-      i++;
-      num /= 16;
-    }
-    int x = num_of_digit - i;
-    for (int j = 0; j < x; j++)
-      add_char(s, c);
-    char temp[100];
-    i = 0;
-    while (num) {
-      temp[i] = num % 16;
-      if(temp[i]<10){
-        temp[i]+='0';
-      }
-      else{
-        temp[i]+='a'-10;
-      }
-      num /= 16;
-      i++;
-    }
-    for (int j = i - 1; j >= 0; j--) {
-      add_char(s, temp[j]);
-    }
+    add_string(s,"OK,test");
   }
 
 }
