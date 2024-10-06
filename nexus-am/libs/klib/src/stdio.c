@@ -52,7 +52,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   while(*fmt) {
     if(*fmt == '%') {
       *s++ = *fmt++;
-      fmt++;
+      // fmt++;
       switch(*fmt) {
         case 's': {
           char *str = va_arg(ap, char *);
