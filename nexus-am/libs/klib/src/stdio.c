@@ -3,9 +3,11 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-void add_string(char *s, char *str) {
+void add_string(char **s, char *str) {
   while (*str!='\0') {
-    *s++ = *str++;
+    **s = *str;
+    (*s)++;
+    str++;
   }
 }
 
@@ -57,7 +59,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       switch(*fmt){
         case 's':{
           char *str=va_arg(ap,char*);
-          add_string(temp,str);
+          add_string(&temp,str);
           break;
         }
         case 'd':{
