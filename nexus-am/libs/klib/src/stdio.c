@@ -148,11 +148,8 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
     int x = num_of_digit - i;
     for (int j = 0; j < x; j++)
       add_char(s, c);
-    add_char(s,'0');
-    add_char(s,'x');
-    num=va_arg(ap,int);
     char temp[100];
-    int i = 0;
+    i = 0;
     while (num) {
       temp[i] = num % 16;
       if(temp[i]<10){
