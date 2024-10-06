@@ -30,7 +30,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     }
     else{
       fmt++;
-      // char digit=is_digit(*fmt);
       switch(*fmt){
         case 's':{
           char *str=va_arg(ap,char*);
