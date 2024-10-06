@@ -64,23 +64,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
         case 'd':{
           int n=va_arg(ap,int);
-          if(n==0){
-            *temp++='0';
-            break;
-          }
-          if(n<0){
-            *temp++='-';
-            n=-n;
-          }
-          char buf[11];
-          int i=0;
-          while(n!=0){
-            buf[i++]=n%10+'0';
-            n=n/10;
-          }
-          for(int j=i-1;j>=0;j--){
-            *temp++=buf[j];
-          }
+          add_number(temp,n);
           break;
         }
       }
