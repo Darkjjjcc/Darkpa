@@ -15,13 +15,13 @@ void add_char(char *s, char c, int *len) {
 
 void add_number(char *s, int num, int *len) {
   if (num == 0) {
-    add_char(s, '0', len);
+    add_char(s, '0', &len);
     return;
   }
   char buf[100];
   int i = 0;
   if(num < 0){
-    add_char(s, '-', len);
+    add_char(s, '-', &len);
     num = -num;
   }
   while (num) {
@@ -29,7 +29,7 @@ void add_number(char *s, int num, int *len) {
     num /= 10;
   }
   while (i)
-    add_char(s, buf[--i], len);
+    add_char(s, buf[--i], &len);
 }
 
 
