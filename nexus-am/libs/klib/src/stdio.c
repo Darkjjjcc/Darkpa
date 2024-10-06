@@ -127,6 +127,7 @@ void add_number(char **s, int num,char mode) {
     }
   }
   else if(mode=='x'){
+    add_string(s,"0x");
     while (num) {
       temp[i] = num % 16 + (num % 16 < 10 ? '0' : 'a' - 10);
       num /= 16;
