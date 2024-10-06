@@ -65,13 +65,15 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           add_number(s, num);
           break;
         }
+        default: {
+          add_char(s, *fmt);
+          break;
+        }
       }
     } 
-    else {
-      add_char(s, *fmt);
-    }
     fmt++;
   }
+  *s = '\0';
   return s - out;
 }
 
