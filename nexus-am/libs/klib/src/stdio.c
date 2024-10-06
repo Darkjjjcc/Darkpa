@@ -93,7 +93,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
       }
     }
-    else
+    // else
       fmt++;
   }
   *temp='\0';
