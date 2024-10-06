@@ -25,7 +25,7 @@ int printf(const char *fmt, ...) {
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *temp=out;
   while(*fmt!='\0'){
-    if(*fmt!='%'){
+    if(*fmt=='%'){
       *temp++=*fmt++;
       fmt++;
       switch(*fmt){
