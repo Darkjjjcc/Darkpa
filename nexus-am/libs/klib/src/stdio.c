@@ -87,14 +87,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           }
           break;
         }
-        default:{
-          add_char(&temp,*fmt);
-          break;
-        }
       }
     }
-    // else
-      fmt++;
+    else{
+      *temp++=*fmt++;
+    }
   }
   *temp='\0';
   return temp-out;
