@@ -6,7 +6,7 @@
 
 void add_string(char **s, char *str);
 void add_char(char **s, char c);
-void add_number(char **s, int num);
+void add_number(char **s, int num,char mode);
 void add_special_number(char **s, const char *fmt, va_list ap,char c);
 
 int printf(const char *fmt, ...) {
@@ -26,7 +26,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char *temp=out;
   while(*fmt!='\0'){
     if(*fmt=='%'){
-      // *temp++=*fmt++;
       fmt++;
       switch(*fmt){
         case 's':{
@@ -36,7 +35,12 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
         case 'd':{
           int num=va_arg(ap,int);
-          add_number(&temp,num);
+          add_number(&temp,num,'d');
+          break;
+        }
+        case 'x':{
+          int num=va_arg(ap,int);
+          add_number(&temp,num,'x');
           break;
         }
         case '0':{
@@ -100,7 +104,7 @@ void add_char(char **s, char c) {
   (*s)++;
 }
 
-void add_number(char **s, int num) {
+void add_number(char **s, int num,char mode) {
   if (num == 0) {
     add_char(s, '0');
     return;
@@ -111,13 +115,27 @@ void add_number(char **s, int num) {
     add_char(s,'-');
     num=-num;
   }
-  while (num) {
-    temp[i] = num % 10 + '0';
-    num /= 10;
-    i++;
+  if(mode=='d'){
+    while (num) {
+      temp[i] = num % 10 + '0';
+      num /= 10;
+      i++;
+    }
+    while (i) {
+      add_char(s, temp[i - 1]);
+      i--;
+    }
   }
-  for (int j = i - 1; j >= 0; j--) {
-    add_char(s, temp[j]);
+  else if(mode=='x'){
+    while (num) {
+      temp[i] = num % 16 + (num % 16 < 10 ? '0' : 'a' - 10);
+      num /= 16;
+      i++;
+    }
+    while (i) {
+      add_char(s, temp[i - 1]);
+      i--;
+    }
   }
 }
 
