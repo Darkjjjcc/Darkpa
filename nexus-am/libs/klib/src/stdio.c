@@ -122,7 +122,6 @@ void add_number(char **s, int num) {
 
 void add_special_number(char **s, const char *fmt, va_list ap,char c) {
   int num_of_digit=0;
-  fmt++;
   while(*fmt!='d'){
     num_of_digit=num_of_digit*10+*fmt-'0';
     fmt++;
