@@ -20,13 +20,16 @@ void add_number(char *s, int num, int *len) {
   }
   char buf[100];
   int i = 0;
+  if(num < 0){
+    add_char(s, '-', len);
+    num = -num;
+  }
   while (num) {
     buf[i++] = num % 10 + '0';
     num /= 10;
   }
-  for (int j = i - 1; j >= 0; j--) {
-    add_char(s, buf[j], len);
-  }
+  while (i)
+    add_char(s, buf[--i], len);
 }
 
 int is_digit(char c) {
