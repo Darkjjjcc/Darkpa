@@ -129,44 +129,43 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
     fmt++;
   }
   int num = va_arg(ap, int);
-  int i = num == 0 ? 1 : 0;
   char temp[100];
   if(*fmt=='d'){
+    int k = num==0?1:0;
     if(num<0){
       add_char(s,'-');
       num=-num;
     }
     while (num) {
-      temp[i] = num % 10 + '0';
+      temp[k] = num % 10 + '0';
       num /= 10;
-      i++;
+      k++;
     }
-    while(i<num_of_digit){
-      add_char(s,'r');
-      i++;
-    }
-    for (int j = i - 1; j >= 0; j--) {
-      add_char(s, temp[j]);
-    }
-  }
-  else{
-    while (num) {
-      int t=num%16;
-      if(t<10){
-        temp[i]=t+'0';
-      }
-      else{
-        temp[i]=t-10+'a';
-      }
-      num/=16;
-      i++;
-    }
-    for(int j=i-1;j>=0;j--){
-      add_char(s,temp[j]);
-    }
+    int i=k;
     while(i<num_of_digit){
       add_char(s,c);
       i++;
+    }
+    while(k){
+      add_char(s,temp[k-1]);
+      k--;
+    }
+  }
+  else if(*fmt=='x'){
+    int k = num==0?1:0;
+    while (num) {
+      temp[k] = num % 16 + (num % 16 < 10 ? '0' : 'a' - 10);
+      num /= 16;
+      k++;
+    }
+    int i=k;
+    while(i<num_of_digit){
+      add_char(s,c);
+      i++;
+    }
+    while(k){
+      add_char(s,temp[k-1]);
+      k--;
     }
   }
 }
