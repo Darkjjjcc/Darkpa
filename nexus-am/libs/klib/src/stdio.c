@@ -15,23 +15,24 @@ void add_char(char *s, char c) {
   *s++ = c;
 }
 
-void add_number(char *s, int num) {
+void add_number(char **s, int num) {
   if (num == 0) {
-    add_char(s, '0');
+    add_char(*s, '0');
+    (*s)++;
     return;
   }
-  char buf[100];
+  char temp[100];
   int i = 0;
-  if(num < 0){
-    add_char(s, '-');
-    num = -num;
-  }
   while (num) {
-    buf[i++] = num % 10 + '0';
+    temp[i++] = num % 10 + '0';
     num /= 10;
   }
-  while (i)
-    add_char(s, buf[--i]);
+  i--;
+  while (i >= 0) {
+    add_char(*s, temp[i]);
+    (*s)++;
+    i--;
+  }
 }
 
 
@@ -64,7 +65,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
         case 'd':{
           int n=va_arg(ap,int);
-          add_number(temp,n);
+          add_number(&temp,n);
           break;
         }
       }
