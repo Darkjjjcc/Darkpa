@@ -33,7 +33,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     }
     else{
       fmt++;
-      char digit=is_digit(*fmt);
+      // char digit=is_digit(*fmt);
       switch(*fmt){
         case 's':{
           char *str=va_arg(ap,char*);
@@ -64,6 +64,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         default:{
           *temp++=*fmt;
           break;
+        }
       }
       fmt++;
     }
@@ -120,7 +121,6 @@ void add_number(char **s, int num) {
 // }
 
 void add_special_number(char **s, const char *fmt, va_list ap,int num) {
-  int num = 0;
 }
 
 #endif
