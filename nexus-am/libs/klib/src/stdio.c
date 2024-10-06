@@ -48,6 +48,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         case '0':{
           fmt++;
           add_special_number(&temp,fmt,ap,'0');
+          fmt++;
           break;
         }
         case '1':
@@ -60,6 +61,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         case '8':
         case '9':{
           add_special_number(&temp,fmt,ap,' ');
+          fmt++;
           break;
         }
         default:{
