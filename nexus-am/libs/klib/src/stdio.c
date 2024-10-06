@@ -42,7 +42,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           break;
         }
         case '0':{
-          fmt++;
+          fmt+=2;
           add_special_number(&temp,fmt,ap,'0');
           fmt++;
           break;
