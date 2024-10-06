@@ -50,9 +50,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char *s = out;
   int len = 0;
   while(*fmt) {
-    if(*fmt == '%') {
+    if(*fmt == '%') 
       *s++ = *fmt++;
-      // fmt++;
+    else {
+      fmt++;
       switch(*fmt) {
         case 's': {
           char *str = va_arg(ap, char *);
