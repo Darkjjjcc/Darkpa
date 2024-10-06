@@ -135,7 +135,7 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
   }
   int x = num_of_digit - i;
   for (int j = 0; j < x; j++) {
-    add_char(s, c);
+    add_char(s, 'r');
   }
   add_number(s,num);
 
