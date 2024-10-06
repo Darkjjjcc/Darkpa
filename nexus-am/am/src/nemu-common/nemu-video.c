@@ -2,6 +2,8 @@
 #include <amdev.h>
 #include <nemu.h>
 
+
+// PA2.3 added for video
 void draw_sync();
 int screen_width();
 int screen_height();
@@ -10,6 +12,7 @@ size_t __am_video_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_VIDEO_INFO: {
       _DEV_VIDEO_INFO_t *info = (_DEV_VIDEO_INFO_t *)buf;
+      // PA2.3 TODO: modify the right width and height
       info->width = 400;
       info->height = 300;
       return sizeof(_DEV_VIDEO_INFO_t);
@@ -22,6 +25,7 @@ size_t __am_video_write(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_VIDEO_FBCTL: {
       _DEV_VIDEO_FBCTL_t *ctl = (_DEV_VIDEO_FBCTL_t *)buf;
+      // PA2.3 TODO: implement the code to write to frame buffer
       int x=ctl->x,y=ctl->y,h=ctl->h,w=ctl->w;
       int W=screen_width();
       int H=screen_height();
@@ -41,6 +45,7 @@ size_t __am_video_write(uintptr_t reg, void *buf, size_t size) {
   return 0;
 }
 
+// PA2.3 TODO: implement the following functions
 void __am_vga_init() {
   int i;
   int size = screen_width() * screen_height();
