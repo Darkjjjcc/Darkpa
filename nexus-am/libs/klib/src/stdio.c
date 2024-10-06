@@ -7,6 +7,7 @@
 void add_string(char **s, char *str);
 void add_char(char *s, char c);
 void add_number(char **s, int num);
+char is_digit(char c);
 
 
 
@@ -31,6 +32,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     }
     else{
       fmt++;
+      char digit=is_digit(*fmt);
       switch(*fmt){
         case 's':{
           char *str=va_arg(ap,char*);
@@ -38,6 +40,14 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           break;
         }
         case 'd':{
+          int n=va_arg(ap,int);
+          add_number(&temp,n);
+          break;
+        }
+        case '0':{
+          fmt++;
+          int x=*fmt-'0';
+          while(x--) *temp++='0';
           int n=va_arg(ap,int);
           add_number(&temp,n);
           break;
@@ -92,4 +102,9 @@ void add_number(char **s, int num) {
     (*s)++;
   }
 }
+
+char is_digit(char c) {
+  return c >= '0' && c <= '9';
+}
+
 #endif
