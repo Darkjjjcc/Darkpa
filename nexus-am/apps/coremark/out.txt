@@ -1,0 +1,13 @@
+# Building coremark [riscv32-nemu] with AM_HOME {/home/hust/pa/ics2019/nexus-am}
+# Building lib-am [riscv32-nemu]
+# Building lib-klib [riscv32-nemu]
+# Creating binary image [riscv32-nemu]
++ LD -> build/coremark-riscv32-nemu.elf
++ OBJCOPY -> build/coremark-riscv32-nemu.bin
+make -C /home/hust/pa/ics2019/nemu ISA=riscv32 run ARGS="-b  -l /home/hust/pa/ics2019/nexus-am/apps/coremark/build/nemu-log.txt /home/hust/pa/ics2019/nexus-am/apps/coremark/build/coremark-riscv32-nemu.bin"
+make[1]: Entering directory '/home/hust/pa/ics2019/nemu'
+Building riscv32-nemu
+make -C /home/hust/pa/ics2019/nemu/tools/qemu-diff
+make[2]: Entering directory '/home/hust/pa/ics2019/nemu/tools/qemu-diff'
+make[2]: Nothing to be done for 'app'.
+make[2]: Leaving directory '/home/hust/pa/ics2019/nemu/tools/qemu-diff'
