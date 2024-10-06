@@ -57,9 +57,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       switch(*fmt){
         case 's':{
           char *str=va_arg(ap,char*);
-          while(*str!='\0'){
-            *temp++=*str++;
-          }
+          add_string(temp,str);
           break;
         }
         case 'd':{
