@@ -32,9 +32,6 @@ void add_number(char *s, int num, int *len) {
     add_char(s, buf[--i], len);
 }
 
-int is_digit(char c) {
-  return c >= '0' && c <= '9';
-}
 
 int printf(const char *fmt, ...) {
   va_list ap;
@@ -61,43 +58,9 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           add_string(s, str, &len);
           break;
         }
-        case 'c': {
-          char c = va_arg(ap, int);
-          add_char(s, c, &len);
-          break;
-        }
         case 'd': {
           int num = va_arg(ap, int);
           add_number(s, num, &len);
-          break;
-        }
-                case 'x':{
-          int n=va_arg(ap,int);
-          if(n==0){
-            *s++='0';
-            *s++='x';
-            *s++='0';
-            break;
-          }
-          if(n<0){
-            *s++='-';
-            n=-n;
-          }
-          char buf[12];
-          int i=0;
-          while(n!=0){
-            int a=n%16;
-            if(a<10)
-              buf[i++]=a+'0';
-            else
-              buf[i++]=a-10+'a';
-            n=n/16;
-          }
-          *s++='0';
-          *s++='x';
-          for(int j=i-1;j>=0;j--){
-            *s++=buf[j];
-          }
           break;
         }
       }
@@ -116,7 +79,6 @@ int sprintf(char *out, const char *fmt, ...) {
   int length=vsprintf(out,fmt,ap);
   va_end(ap);
   return length;
-  return 0;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
