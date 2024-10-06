@@ -3,35 +3,11 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-void add_string(char **s, char *str) {
-  while (*str!='\0') {
-    **s = *str;
-    (*s)++;
-    str++;
-  }
-}
 
-void add_char(char *s, char c) {
-  *s++ = c;
-}
+void add_string(char **s, char *str);
+void add_char(char *s, char c);
+void add_number(char **s, int num);
 
-void add_number(char **s, int num) {
-  if (num == 0) {
-    add_char(*s, '0');
-    (*s)++;
-    return;
-  }
-  char temp[100];
-  int i = 0;
-  while (num) {
-    temp[i++] = num % 10 + '0';
-    num /= 10;
-  }
-  while(i--) {
-    add_char(*s, temp[i]);
-    (*s)++;
-  }
-}
 
 
 int printf(const char *fmt, ...) {
@@ -86,4 +62,34 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
   return 0;
 }
 
+
+void add_string(char **s, char *str) {
+  while (*str!='\0') {
+    **s = *str;
+    (*s)++;
+    str++;
+  }
+}
+
+void add_char(char *s, char c) {
+  *s++ = c;
+}
+
+void add_number(char **s, int num) {
+  if (num == 0) {
+    add_char(*s, '0');
+    (*s)++;
+    return;
+  }
+  char temp[100];
+  int i = 0;
+  while (num) {
+    temp[i++] = num % 10 + '0';
+    num /= 10;
+  }
+  while(i--) {
+    add_char(*s, temp[i]);
+    (*s)++;
+  }
+}
 #endif
