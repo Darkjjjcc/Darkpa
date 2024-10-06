@@ -3,25 +3,25 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-void add_string(char *s, char *str, int *len) {
+void add_string(char *s, char *str) {
   while (*str) {
-    s[(*len)++] = *str++;
+    *s++ = *str++;
   }
 }
 
-void add_char(char *s, char c, int *len) {
-  s[(*len)++] = c;
+void add_char(char *s, char c) {
+  *s++ = c;
 }
 
-void add_number(char *s, int num, int *len) {
+void add_number(char *s, int num) {
   if (num == 0) {
-    add_char(s, '0', &len);
+    add_char(s, '0');
     return;
   }
   char buf[100];
   int i = 0;
   if(num < 0){
-    add_char(s, '-', &len);
+    add_char(s, '-');
     num = -num;
   }
   while (num) {
@@ -29,7 +29,7 @@ void add_number(char *s, int num, int *len) {
     num /= 10;
   }
   while (i)
-    add_char(s, buf[--i], &len);
+    add_char(s, buf[--i]);
 }
 
 
@@ -55,22 +55,22 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       switch(*fmt) {
         case 's': {
           char *str = va_arg(ap, char *);
-          add_string(s, str, &len);
+          add_string(s, str);
           break;
         }
         case 'd': {
           int num = va_arg(ap, int);
-          add_number(s, num, &len);
+          add_number(s, num);
           break;
         }
       }
     } 
     else {
-      add_char(s, *fmt, &len);
+      add_char(s, *fmt);
     }
     fmt++;
   }
-  return len;
+  return s - out;
 }
 
 int sprintf(char *out, const char *fmt, ...) {
