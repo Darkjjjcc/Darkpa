@@ -142,7 +142,7 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
       i++;
     }
     while(i<num_of_digit){
-      add_char(s,c);
+      add_char(s,'r');
       i++;
     }
     for (int j = i - 1; j >= 0; j--) {
