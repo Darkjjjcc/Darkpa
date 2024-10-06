@@ -4,17 +4,18 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 int printf(const char *fmt, ...) {
-  char buf[1000];
-  va_list ap;
-  va_start(ap,fmt);
-  int length=vsprintf(buf,fmt,ap);
-  va_end(ap);
-  int i=0;
-  while(buf[i]!='\0'){
-    _putc(buf[i]);
-    i++;
-  }
-  return length;
+	char buf[128] = {'\0'};
+	va_list args;
+	int n;
+
+	va_start(args, fmt);
+	n = vsprintf(buf, fmt, args);
+	for(size_t i=0;i<128;i++){
+		if(buf[i]=='\0')	break;
+		else _putc(buf[i]);
+	}
+	va_end(args);
+	return n;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
