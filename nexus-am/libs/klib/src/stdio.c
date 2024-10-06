@@ -106,6 +106,11 @@ void add_number(char **s, int num) {
   }
   char temp[100];
   int i = 0;
+  if(num<0){
+    add_char(*s,'-');
+    (*s)++;
+    num=-num;
+  }
   while (num) {
     temp[i] = num % 10 + '0';
     num /= 10;
