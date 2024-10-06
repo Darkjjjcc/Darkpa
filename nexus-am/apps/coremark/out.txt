@@ -1,6 +1,8 @@
 # Building coremark [riscv32-nemu] with AM_HOME {/home/hust/pa/ics2019/nexus-am}
 # Building lib-am [riscv32-nemu]
 # Building lib-klib [riscv32-nemu]
++ CC src/stdio.c
++ AR -> build/klib-riscv32-nemu.a
 # Creating binary image [riscv32-nemu]
 + LD -> build/coremark-riscv32-nemu.elf
 + OBJCOPY -> build/coremark-riscv32-nemu.bin
