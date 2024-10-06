@@ -128,22 +128,44 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
     num_of_digit=num_of_digit*10+*fmt-'0';
     fmt++;
   }
-  int num=va_arg(ap,int);
-  int i = num==0?1:0;
-  if(*fmt == 'd'){
-    while (num) {
-      i++;
-      num /= 10;
+  int num = va_arg(ap, int);
+  int i = num == 0 ? 1 : 0;
+  int CF_num = 0;
+  if(*fmt=='d'){
+    if(num<0){
+      add_char(s,'-');
+      num=-num;
     }
-    int x = num_of_digit - i;
-    for (int j = 0; j < x; j++)
+    while (num) {
+      CF_num = CF_num * 10 + num % 10;
+      num /= 10;
+      i++;
+    }
+    while (i < num_of_digit) {
       add_char(s, c);
-    add_number(s,num);
+      i++;
+    }
+    while (CF_num) {
+      add_char(s, CF_num % 10 + '0');
+      CF_num /= 10;
+    }
   }
-  else if(*fmt == 'x'){
-    add_number(s,num);
+  else{
+    while (num) {
+      CF_num = num % 16;
+      if (CF_num < 10) {
+        add_char(s, CF_num + '0');
+      } else {
+        add_char(s, CF_num - 10 + 'a');
+      }
+      num /= 16;
+      i++;
+    }
+    while (i < num_of_digit) {
+      add_char(s, c);
+      i++;
+    }
   }
-
 }
 
 #endif
