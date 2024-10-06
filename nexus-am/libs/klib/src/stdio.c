@@ -44,6 +44,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         case '0':{
           fmt++;
           add_special_number(&temp,fmt,ap,'0');
+          fmt++;
           break;
         }
         case '1':
@@ -56,6 +57,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         case '8':
         case '9':{
           add_special_number(&temp,fmt,ap,' ');
+          fmt++;
           break;
         }
         default:{
@@ -121,6 +123,7 @@ void add_number(char **s, int num) {
 
 void add_special_number(char **s, const char *fmt, va_list ap,char c) {
   int num_of_digit=0;
+  fmt++;
   while(*fmt!='d'){
     num_of_digit=num_of_digit*10+*fmt-'0';
     fmt++;
