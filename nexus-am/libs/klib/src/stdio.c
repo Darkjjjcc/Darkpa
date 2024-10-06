@@ -88,6 +88,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
         default:{
           *temp++=*fmt;
+          add_char(&temp,*fmt);
           break;
       }
     }
