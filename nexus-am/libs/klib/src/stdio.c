@@ -107,11 +107,12 @@ void add_number(char **s, int num) {
   char temp[100];
   int i = 0;
   while (num) {
-    temp[i++] = num % 10 + '0';
+    temp[i] = num % 10 + '0';
     num /= 10;
+    i++;
   }
-  while(i--) {
-    add_char(*s, temp[i]);
+  for (int j = i - 1; j >= 0; j--) {
+    add_char(*s, temp[j]);
     (*s)++;
   }
 }
