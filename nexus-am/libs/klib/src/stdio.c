@@ -50,19 +50,31 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char *s = out;
   int len = 0;
   while(*fmt) {
-    if (*fmt == '%') {
+    if(*fmt == '%') {
       fmt++;
-      if (*fmt == 's') {
-        char *str = va_arg(ap, char *);
-        add_string(s, str, &len);
-      } else if (*fmt == 'c') {
-        char c = va_arg(ap, int);
-        add_char(s, c, &len);
-      } else if (*fmt == 'd') {
-        int num = va_arg(ap, int);
-        add_number(s, num, &len);
+      switch(*fmt) {
+        case 's': {
+          char *str = va_arg(ap, char *);
+          add_string(s, str, &len);
+          break;
+        }
+        case 'c': {
+          char c = va_arg(ap, int);
+          add_char(s, c, &len);
+          break;
+        }
+        case 'd': {
+          int num = va_arg(ap, int);
+          add_number(s, num, &len);
+          break;
+        }
+        case '%': {
+          add_char(s, '%', &len);
+          break;
+        }
       }
-    } else {
+    } 
+    else {
       add_char(s, *fmt, &len);
     }
     fmt++;
