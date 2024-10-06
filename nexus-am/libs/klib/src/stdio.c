@@ -27,6 +27,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   while(*fmt!='\0'){
     if(*fmt!='%'){
       *temp++=*fmt++;
+      fmt++;
       switch(*fmt){
         case 's':{
           char *str=va_arg(ap,char*);
@@ -92,7 +93,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
       }
     }
-    fmt++;
+    else
+      fmt++;
   }
   *temp='\0';
   return temp-out;
