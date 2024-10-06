@@ -128,14 +128,14 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
   }
   int num=va_arg(ap,int);
   char temp[100];
-  int i = 0;
+  int i = num==0?1:0;
   while (num) {
     i++;
     num /= 10;
   }
   int x = num_of_digit - i;
   for (int j = 0; j < x; j++) {
-    add_char(s, 'r');
+    add_char(s, c);
   }
   add_number(s,num);
 
