@@ -100,7 +100,7 @@ void add_char(char **s, char c) {
 
 void add_number(char **s, int num) {
   if (num == 0) {
-    add_char(*s, '0');
+    add_char(s, '0');
     (*s)++;
     return;
   }
@@ -140,7 +140,6 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
     }
   }
   add_number(s,num);
-
 
 }
 
