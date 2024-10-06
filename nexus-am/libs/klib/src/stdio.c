@@ -3,117 +3,127 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-#define MAX_SIZE 4096
+const char lower_dict[] = "0123456789abcdef";
+const char upper_dict[] = "0123456789ABCDEF";
 
-
-void puts_helper(const char* string,int ptr){
-  int i;
-  if(ptr<0){
-    for(i=0;string[i];++i)_putc(string[i]);
-  }else{
-    for(i=0;i<ptr;++i)_putc(string[i]);
+// 借鉴了 https://github.com/atgreen/FreeRTOS/blob/master/Demo/CORTEX_STM32F103_Primer_GCC/printf-stdarg.c
+static inline int _printc(char **out, char c) {
+  if (out) {
+    **out = c;
+    (*out)++;
+  } else {
+    _putc(c);
   }
+  return 1;
+}
+
+static inline int _prints(char **out, const char *s) {
+  int cnt = 0;
+  while (*s != '\0') {
+    cnt += _printc(out, *(s++));
+  }
+  return cnt;
+}
+
+static inline int _printi(char **out, int num, int base, int use_upper, int sign) {
+  assert(base <= 16 && base >= 2);
+
+  const int buf_sz = 51;
+  char buf[buf_sz];
+  buf[buf_sz - 1] = '\0';
+  const char *dict = use_upper ? upper_dict : lower_dict;
+
+  if (num == 0) {
+    return _printc(out, dict[0]);
+  }
+
+  char *p = &buf[buf_sz - 1];
+  if (!sign) {
+    unsigned int n = *(unsigned int *)&num;
+    while (n != 0) {
+      p--;
+      *p = dict[n % base];
+      n /= base;
+    }
+  } else {
+    int is_neg = 0;
+    if (num < 0) {
+      num = -num;
+      is_neg = 1;
+    }
+
+    while (num != 0) {
+      p--;
+      *p = dict[num % base];
+      num /= base;
+    }
+
+    if (is_neg) {
+      p--;
+      *p = '-';
+    }
+  }
+
+  return _prints(out, p);
+}
+
+static inline int _print(char **out, const char *fmt, va_list ap) {
+  const char *p = fmt;
+  int cnt = 0;
+  while (*p) {
+    if (*p == '%') {
+      p++;
+      switch (*p) {
+        case 'd':
+          cnt += _printi(out, va_arg(ap, int), 10, 0, 1);
+          break;
+        case 'u':
+          cnt += _printi(out, va_arg(ap, int), 10, 0, 0);
+          break;
+        case 'x':
+          cnt += _printi(out, va_arg(ap, int), 16, 0, 0);
+          break;
+        case 'X':
+          cnt += _printi(out, va_arg(ap, int), 16, 1, 0);
+          break;
+        case 's':
+          cnt += _prints(out, va_arg(ap, char *));
+          break;
+        default:
+          break;
+      }
+    } else {
+      cnt += _printc(out, *p);
+    }
+    p++;
+  }
+  if (out)
+    **out = '\0';
+  return cnt;
 }
 
 int printf(const char *fmt, ...) {
   va_list ap;
-  va_start(ap,fmt);
-  char buffer[MAX_SIZE];
-  int ptr = vsprintf(buffer,fmt,ap);
-  puts_helper(buffer,ptr);
+  va_start(ap, fmt);
+  int cnt = _print(NULL, fmt, ap);
   va_end(ap);
-  return 0;
-}
-
-int itoa_helper(char *out, int ptr, uint32_t valint, int base){
-  assert(valint>=0);
-  int stack[128],sptr=0;
-  if(valint==0)out[ptr++]='0';
-  else{
-    for(;valint;stack[sptr++]=valint%base,valint=valint/base);
-    for(--sptr;sptr>=0;--sptr){
-      if(stack[sptr]<10)out[ptr++]=stack[sptr]+'0';
-      else if(stack[sptr]<16)out[ptr++]=stack[sptr]-10+'a';
-      else{
-        assert(0);
-      }
-    }
-  }
-  return ptr;
+  return cnt;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  int ptr=0;
-  for(;*fmt;++fmt){
-    if(*fmt!='%')out[ptr++]=*fmt;
-    else{
-      switch(*(++fmt)){
-        case 'c':{
-          char c = va_arg(ap,int);
-          out[ptr++]=c;
-          break;
-        }
-        case 'd':{
-          int valint=va_arg(ap,int);
-          if(valint<0){
-            out[ptr++]='-';
-            valint=-valint;
-          }
-          ptr = itoa_helper(out,ptr,valint,10);
-          break;
-        }
-        case 'x':{
-          uint32_t valint=va_arg(ap,uint32_t);
-          ptr = itoa_helper(out,ptr,valint,16);
-          break;
-        }
-        case 's':{
-          const char* valstr=va_arg(ap,char*);
-          for(;*valstr;out[ptr++]=*valstr++);
-          break;
-        }
-        case 'f':{
-          float valflt=va_arg(ap,float);
-          if(valflt<0){
-            out[ptr++]='-';
-            valflt=-valflt;
-          }
-          int tmpint=(int)valflt;
-          int tmpflt=(int)(10000*(valflt-tmpint));
-          ptr=itoa_helper(out,ptr,tmpint,10);
-          out[ptr++]='.';
-          ptr=itoa_helper(out,ptr,tmpflt,10);
-          break;
-        }
-        default:{
-          out[ptr++]='%';
-          out[ptr++]=*fmt;
-          break;
-        }
-      }
-    }
-  }
-  out[ptr]=0;
-  return ptr;
+  return _print(&out, fmt, ap);
 }
 
 int sprintf(char *out, const char *fmt, ...) {
   va_list ap;
-  va_start(ap,fmt);
-
-  int ptr=vsprintf(out,fmt,ap);
-
+  va_start(ap, fmt);
+  int cnt = _print(&out, fmt, ap);
   va_end(ap);
-  return ptr;
+  return cnt;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
-  va_list arg;
-  va_start(arg,fmt);
-  vsprintf(out,fmt,arg);
-  out[n]=0;
-  va_end(arg);
-  return n;
+  return 0;
 }
 
 #endif
