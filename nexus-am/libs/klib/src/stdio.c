@@ -27,11 +27,9 @@ void add_number(char **s, int num) {
     temp[i++] = num % 10 + '0';
     num /= 10;
   }
-  i--;
-  while (i >= 0) {
+  while(i--) {
     add_char(*s, temp[i]);
     (*s)++;
-    i--;
   }
 }
 
