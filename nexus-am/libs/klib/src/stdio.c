@@ -4,7 +4,7 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 void add_string(char *s, char *str) {
-  while (*str) {
+  while (*str!='\0') {
     *s++ = *str++;
   }
 }
