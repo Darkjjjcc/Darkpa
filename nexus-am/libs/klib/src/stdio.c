@@ -129,7 +129,6 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
     fmt++;
   }
   int num=va_arg(ap,int);
-  char temp[100];
   int i = num==0?1:0;
   while (num) {
     i++;
