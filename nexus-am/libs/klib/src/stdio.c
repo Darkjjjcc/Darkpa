@@ -60,6 +60,31 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           fmt++;
           break;
         }
+        case 'c':{
+          char c=va_arg(ap,int);
+          add_char(&temp,c);
+          break;
+        }
+        case 'x':{
+          int num=va_arg(ap,int);
+          char temp[100];
+          int i = 0;
+          while (num) {
+            int x=num % 16;
+            if(x<10){
+              temp[i] = x + '0';
+            }
+            else{
+              temp[i]=x-10+'a';
+            }
+            num /= 16;
+            i++;
+          }
+          for (int j = i - 1; j >= 0; j--) {
+            add_char(&temp,temp[j]);
+          }
+          break;
+        }
         default:{
           *temp++=*fmt;
           break;
@@ -138,7 +163,6 @@ void add_special_number(char **s, const char *fmt, va_list ap,char c) {
     add_char(s, c);
   }
   add_number(s,num);
-
 }
 
 #endif
