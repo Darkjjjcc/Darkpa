@@ -11,7 +11,7 @@ size_t __am_timer_read(uintptr_t reg, void *buf, size_t size) {
       // PA2.3 TODO: calculate time using RTC (Real Time Counter)
       uint32_t current_time = inl(RTC_ADDR);
       uptime->hi = 0;
-      uptime->lo = current_time;
+      uptime->lo = current_time - boot_time;
       return sizeof(_DEV_TIMER_UPTIME_t);
     }
     case _DEVREG_TIMER_DATE: {
