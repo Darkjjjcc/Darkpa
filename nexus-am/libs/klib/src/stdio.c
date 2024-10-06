@@ -8,9 +8,6 @@ void add_string(char **s, char *str);
 void add_char(char *s, char c);
 void add_number(char **s, int num);
 void add_special_number(char **s, const char *fmt, va_list ap,char c);
-// char is_digit(char c);
-
-
 
 int printf(const char *fmt, ...) {
   va_list ap;
@@ -119,9 +116,6 @@ void add_number(char **s, int num) {
   }
 }
 
-// char is_digit(char c) {
-//   return c >= '0' && c <= '9';
-// }
 
 void add_special_number(char **s, const char *fmt, va_list ap,char c) {
   int num_of_digit=0;
