@@ -21,7 +21,7 @@ size_t __am_timer_read(uintptr_t reg, void *buf, size_t size) {
       rtc->hour   = 0;
       rtc->day    = 0;
       rtc->month  = 0;
-      rtc->year   = 2000;
+      rtc->year   = 2024;
       return sizeof(_DEV_TIMER_DATE_t);
     }
   }
