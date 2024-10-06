@@ -16,11 +16,6 @@ static OpcodeEntry store_table [8] = {
 
 static make_EHelper(store) {
   decinfo.width = store_table[decinfo.isa.instr.funct3].width;
-  // printf("now width is %d\n", decinfo.width);
-  // printf("now instr is %x\n", decinfo.isa.instr.val);
-  // printf("at exec_store, now pc is %x\n", cpu.pc);
-  // printf("at exec_store, now funct3 is %d\n", decinfo.isa.instr.funct3);
-  // printf("at exec_store, now store_table[decinfo.isa.instr.funct3] is %x\n", store_table[0].execute);
   idex(pc, &store_table[decinfo.isa.instr.funct3]);
 }
 
@@ -34,7 +29,5 @@ static OpcodeEntry opcode_table [32] = {
 void isa_exec(vaddr_t *pc) {
   decinfo.isa.instr.val = instr_fetch(pc, 4);
   assert(decinfo.isa.instr.opcode1_0 == 0x3);
-  // printf("at exec_isa, now pc is %x\n", cpu.pc);
-  // printf("at exec_isa, now opcode6_2 is %x\n", decinfo.isa.instr.opcode6_2);
   idex(pc, &opcode_table[decinfo.isa.instr.opcode6_2]);
 }
