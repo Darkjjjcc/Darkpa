@@ -30,7 +30,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // PA3.3 updated: use fs_read instead of ramdisk_read
   Elf_Ehdr head;
   int fd = fs_open("/bin/text", 0, 0);
-  printf("fd = %d\n", fd);
+  // printf("fd = %d\n", fd);
 
   fs_lseek(fd, 0, SEEK_SET);
   fs_read(fd, &head, sizeof(head));
@@ -45,6 +45,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       memset((void *)(temp.p_vaddr + temp.p_filesz), 0, temp.p_memsz - temp.p_filesz);
     }
   }
+  printf("head.e_entry = %x\n", head.e_entry);
   return head.e_entry;
 }
 
