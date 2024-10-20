@@ -49,7 +49,7 @@ make_EHelper(syscall){
             }
             else if(instr.val == 0x10200073){
                 decinfo.jmp_pc = decinfo.isa.sepc + 4;
-                decinfo_set_jmp(true);
+                rtl_j(decinfo.jmp_pc);
             }
             else{
                 assert(0 && "system code unfinish");
