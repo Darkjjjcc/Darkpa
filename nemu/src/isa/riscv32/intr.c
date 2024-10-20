@@ -1,5 +1,4 @@
 #include "rtl/rtl.h"
-
 #include "cpu/exec.h"
 void raise_intr(uint32_t NO, vaddr_t epc) {
   decinfo.isa.sepc = epc;
