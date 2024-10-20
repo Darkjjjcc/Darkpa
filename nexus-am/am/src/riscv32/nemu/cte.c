@@ -15,7 +15,11 @@ _Context* __am_irq_handle(_Context *c) {
             break;
         case 0: // exit
         case 1: // yield
+        case 2: // open
+        case 3: // read
         case 4: // write
+        case 7: // close
+        case 8: // lseek
         case 9: // sbrk
             ev.event = _EVENT_SYSCALL;
             break;
