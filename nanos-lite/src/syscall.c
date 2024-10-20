@@ -24,6 +24,7 @@ _Context* do_syscall(_Context *c) {
   // printf("GPR2: %d\n", a[1]);
   // printf("GPR3: %d\n", a[2]);
   // printf("GPR4: %d\n", a[3]);
+  printf("syscall ID = %d\n", a[0]);
 
   switch (a[0]) {
     case SYS_yield:
