@@ -1,59 +1,73 @@
 #include "cpu/exec.h"
 
-extern void raise_intr(uint32_t NO, vaddr_t epc);
-int32_t read_csr(int scr_id){
-    switch (scr_id)
-    {
-    case 0x100: return decinfo.isa.sstatus; break;
-    case 0x105: return decinfo.isa.stvec;   break;
-    case 0x141: return decinfo.isa.sepc;    break;
-    case 0x142: return decinfo.isa.scause;  break;
-    default:
-        assert("Unkown csr_id");
+extern void raise_intr(uint32_t, vaddr_t);
+int32_t readcsr(int i){
+    switch(i){
+        case 0x105:
+            return decinfo.isa.stvec;
+        case 0x142:
+            return decinfo.isa.scause;
+        case 0x100:
+            return decinfo.isa.sstatus;
+        case 0x141:
+            //printf("%x\n", decinfo.isa.sepc);
+            //printf("pc%x\n", decinfo.seq_pc-4);
+            return decinfo.isa.sepc;
+        default:
+            assert(0 && "Unfinished readcsr");
     }
 }
 
-void write_csr(int scr_id, int32_t val){
-    switch (scr_id)
-    {
-    case 0x100: decinfo.isa.sstatus = val; break;
-    case 0x105: decinfo.isa.stvec = val;   break;
-    case 0x141: decinfo.isa.sepc = val;    break;
-    case 0x142: decinfo.isa.scause = val;  break;
-    default:
-        assert("Unkown csr_id");
+void writecsr(int i, int32_t val){
+    //TODO
+    switch(i){
+        case 0x105:
+            decinfo.isa.stvec = val;
+            break;
+        case 0x142:
+            decinfo.isa.scause = val;
+            break;
+        case 0x100:
+            decinfo.isa.sstatus = val;
+            break;
+        case 0x141:
+            decinfo.isa.sepc = val;
+            break;
+        default:
+            assert(0 && "Unfinished readcsr");
     }
 }
 
 make_EHelper(syscall){
-    Instr instr = decinfo.isa.instr; 
-    switch(decinfo.isa.instr.funct3){
-        case 0b000:{
-            if(decinfo.isa.instr.funct7 == 0b0000000){      //ecall
-                raise_intr(reg_l(17), decinfo.seq_pc);
+    Instr instr = decinfo.isa.instr;
+    switch(instr.funct3){
+        //ecall
+        case 0b0:
+            if((instr.val & ~(0x7f))==0){
+                raise_intr(reg_l(17), decinfo.seq_pc-4);
             }
-            else if(decinfo.isa.instr.funct7 == 0b0001000){ //sret
-                decinfo.jmp_pc = decinfo.isa.sepc+4;
-                rtl_j(decinfo.jmp_pc);
+            else if(instr.val == 0x10200073){
+                decinfo.jmp_pc = decinfo.isa.sepc + 4;
+                decinfo_set_jmp(true);
             }
+            else{
+                assert(0 && "system code unfinish");
             }
             break;
-        case 0b001:{                                        //csrrw
-            int32_t val = read_csr(instr.csr);
-            write_csr(instr.csr, id_src->val);
-            rtl_sr(id_dest->reg, &val, 4);
-            print_asm_template3(csrrw);
+        // csrrw
+        case 0b001:
+            s0 = readcsr(instr.csr);
+            writecsr(instr.csr, id_src->val);
+            rtl_sr(id_dest->reg, &s0, 4);
             break;
-        }
-        case 0b010:{                                        //csrrs
-            int32_t val = read_csr(instr.csr);
-            write_csr(instr.csr, val | id_src->val);
-            rtl_sr(id_dest->reg, &val, 4);
-            print_asm_template3(csrrs);
+        case 0b010:
+            s0 = readcsr(instr.csr);
+            writecsr(instr.csr, s0 | id_src->val);
+            //printf("s0:%x\n",s0);
+            rtl_sr(id_dest->reg, &s0, 4);
+            //printf("reg:%d\n", reg_l(id_dest->reg));
             break;
-        }
         default:
-            assert(0);
+            assert(0 && "Unfinished system op");
     }
-    
 }
