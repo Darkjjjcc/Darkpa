@@ -78,6 +78,7 @@ int sys_write(int fd, void *buf, size_t count) {
 }
 
 int sys_brk(intptr_t addr) {
+  printf("brk %x\n", addr);
   program_break = addr;
   return 0;
 }
