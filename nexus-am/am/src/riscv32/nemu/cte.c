@@ -20,7 +20,7 @@ _Context* __am_irq_handle(_Context *c) {
         case 4: // write
         case 7: // close
         case 8: // lseek
-        case 9: // sbrk
+        // case 9: // sbrk
             ev.event = _EVENT_SYSCALL;
             break;
         default: ev.event = _EVENT_ERROR; break;
