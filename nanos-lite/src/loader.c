@@ -29,7 +29,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // return ehdr.e_entry;
   // PA3.3 updated: use fs_read instead of ramdisk_read
   Elf_Ehdr head;
-  int fd = fs_open("/bin/events", 0, 0);
+  int fd = fs_open("/bin/bmptest", 0, 0);
   // printf("fd = %d\n", fd);
 
   fs_lseek(fd, 0, SEEK_SET);

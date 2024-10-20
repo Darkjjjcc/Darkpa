@@ -7,6 +7,9 @@ extern size_t ramdisk_read(void*, size_t, size_t);          // for fs_read
 extern size_t ramdisk_write(const void*, size_t, size_t);   // for fs_write
 extern size_t serial_write(const void*, size_t, size_t);    // for stdout and stderr
 extern size_t events_read(void*, size_t, size_t);           // for events
+extern size_t dispinfo_read(void*, size_t, size_t);         // for dispinfo
+extern size_t fb_write(const void*, size_t, size_t);        // for fb
+extern size_t fbsync_write(const void*, size_t, size_t);    // for fbsync
 
 typedef struct {
   char *name;
@@ -36,6 +39,9 @@ static Finfo file_table[] __attribute__((used)) = {
   {"stdout", 0, 0, 0, invalid_read, serial_write},
   {"stderr", 0, 0, 0, invalid_read, serial_write},
   {"/dev/events", 0, 0, 0, events_read, invalid_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+  {"/dev/fbsync", 0, 0, 0, invalid_read, fbsync_write},
+  {"/proc/dispinfo", 128, 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
 
@@ -119,4 +125,6 @@ int fs_close(int fd){
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  int fd = fs_open("/dev/fb", 0, 0);
+  file_table[fd].size = screen_width() * screen_height() * 4;
 }
