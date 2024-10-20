@@ -45,7 +45,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       memset((void *)(temp.p_vaddr + temp.p_filesz), 0, temp.p_memsz - temp.p_filesz);
     }
   }
-  printf("head.e_entry = %x\n", head.e_entry);
+  // printf("head.e_entry = %x\n", head.e_entry);
   return head.e_entry;
 }
 
