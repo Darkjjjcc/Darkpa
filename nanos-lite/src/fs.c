@@ -86,7 +86,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
     else
       len = 0;
   }
-  printf("write %d bytes\n", len);
+  // printf("write %d bytes\n", len);
   if (!file_table[fd].write) {
     ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
   }
