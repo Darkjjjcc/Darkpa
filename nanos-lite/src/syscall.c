@@ -67,14 +67,14 @@ void sys_exit(int code) {
 
 
 int sys_write(int fd, void *buf, size_t count) {
-  if(fd == 1 || fd == 2) {
-    for(int i = 0; i < count; i++) {
-      _putc(((char*)buf)[i]);
-    }
-    return count;
-  }
-  return 0;
-  // return fs_write(fd, buf, count);
+  // if(fd == 1 || fd == 2) {
+  //   for(int i = 0; i < count; i++) {
+  //     _putc(((char*)buf)[i]);
+  //   }
+  //   return count;
+  // }
+  // return 0;
+  return fs_write(fd, buf, count);
 }
 
 int sys_brk(intptr_t addr) {
