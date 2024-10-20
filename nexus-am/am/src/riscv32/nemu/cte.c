@@ -7,8 +7,19 @@ _Context* __am_irq_handle(_Context *c) {
   _Context *next = c;
   if (user_handler) {
     _Event ev = {0};
+    printf("c->cause: %d\n", c->cause);
     switch (c->cause) {
-      default: ev.event = _EVENT_ERROR; break;
+        // PA3 added for system instructions
+        case -1:
+            ev.event = _EVENT_YIELD;
+            break;
+        case 0: // exit
+        case 1: // yield
+        case 4: // write
+        case 9: // sbrk
+            ev.event = _EVENT_SYSCALL;
+            break;
+        default: ev.event = _EVENT_ERROR; break;
     }
 
     next = user_handler(ev, c);
@@ -16,7 +27,6 @@ _Context* __am_irq_handle(_Context *c) {
       next = c;
     }
   }
-
   return next;
 }
 
