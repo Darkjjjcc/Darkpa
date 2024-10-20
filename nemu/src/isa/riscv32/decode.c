@@ -92,3 +92,12 @@ make_DHelper(R)
   print_Dop(id_src2->str, OP_STR_SIZE, "%s", reg_name(id_src2->reg, 4));
   decode_op_r(id_dest, decinfo.isa.instr.rd, false);
 }
+
+// pa3 added for system instructions
+make_DHelper(SYSTEM)
+{
+  decode_op_r(id_src, decinfo.isa.instr.rs1, true);
+  decode_op_i(id_src2, decinfo.isa.instr.csr, true);
+  print_Dop(id_src->str, OP_STR_SIZE, "%d", decinfo.isa.instr.csr);
+  decode_op_r(id_dest, decinfo.isa.instr.rd, false);
+}

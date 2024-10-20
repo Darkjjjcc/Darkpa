@@ -20,3 +20,5 @@ make_EHelper(nemu_trap);
 
 make_EHelper(lb);
 make_EHelper(lh);
+
+make_EHelper(syscall);
