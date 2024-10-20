@@ -40,35 +40,29 @@ static Finfo file_table[] __attribute__((used)) = {
 
 // PA3.3 updated
 int fs_open(const char *pathname, int flags, int mode){
-  // printf("open %s\n", pathname);
-  for(int i = 0; i < NR_FILES;i++){
-    if(strcmp(pathname, file_table[i].name) == 0){
-        // printf("open %s OK\n", pathname);
-        return i;
+    for(int i = 3; i < NR_FILES;i++){
+        if(strcmp(pathname, file_table[i].name) == 0){
+            return i;
+        }
     }
-  }
-  assert(0 && "Can't find file");
+    assert(0 && "Can't find file");
 }
 
 size_t fs_read(int fd, void *buf, size_t len) {  
-//   printf("open_offset = %d, disk_offset = %d\n", file_table[fd].open_offset, file_table[fd].disk_offset);
-  assert(fd >= 3 && fd < NR_FILES);
-  if (file_table[fd].open_offset + len >= file_table[fd].size) {
-    if (file_table[fd].size > file_table[fd].open_offset)
-      len = file_table[fd].size - file_table[fd].open_offset;
-    else
-      len = 0;
-  }
-//   printf("read %d bytes\n", len);
-  if (!file_table[fd].read) {
-    ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
-  }
-  else {
-    len = file_table[fd].read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
-  }
-  file_table[fd].open_offset += len;
-//   printf("open_offset = %d, disk_offset = %d\n", file_table[fd].open_offset, file_table[fd].disk_offset);
-  return len;
+    if(fd>=3 &&(file_table[fd].open_offset+len >= file_table[fd].size)){
+        if(file_table[fd].size > file_table[fd].open_offset)
+            len = file_table[fd].size - file_table[fd].open_offset;
+        else
+            len = 0;
+    }
+    if(!file_table[fd].read){
+        ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
+    }
+    else{
+        len = file_table[fd].read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
+    }
+    file_table[fd].open_offset += len;
+    return len;
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
@@ -79,21 +73,20 @@ size_t fs_write(int fd, const void *buf, size_t len) {
     }
     return len;
   }
-  if (fd >= 3 && (file_table[fd].open_offset + len > file_table[fd].size)) {
-    if (file_table[fd].size > file_table[fd].open_offset)
-      len = file_table[fd].size - file_table[fd].open_offset;
-    else
-      len = 0;
-  }
-  // printf("write %d bytes\n", len);
-  if (!file_table[fd].write) {
-    ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
-  }
-  else {
-    file_table[fd].write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
-  }
-  file_table[fd].open_offset += len;
-  return len;
+    if(fd>=5 &&(file_table[fd].open_offset+len > file_table[fd].size)){
+        if(file_table[fd].size > file_table[fd].open_offset)
+            len = file_table[fd].size - file_table[fd].open_offset;
+        else
+            len = 0;
+    }
+    if(!file_table[fd].write){
+        ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
+    }
+    else{
+        file_table[fd].write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
+    }
+    file_table[fd].open_offset += len;
+    return len;
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence){
