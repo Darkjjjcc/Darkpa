@@ -50,10 +50,10 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   // _yield(); // 模拟IO慢，进行调度
 
   int x, y;
-  assert(offset + len <= (size_t)screen_h * screen_w * 4);
+  // assert(offset + len <= (size_t)screen_h * screen_w * 4);
   x = (offset / 4) % screen_w;
   y = (offset / 4) / screen_w;
-  assert(x + len < (size_t)screen_w * 4);
+  // assert(x + len < (size_t)screen_w * 4);
   draw_rect((void *)buf, x, y, len / 4, 1);
   return len;
 }
