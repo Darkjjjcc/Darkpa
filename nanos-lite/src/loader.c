@@ -29,6 +29,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // return ehdr.e_entry;
   // PA3.3 updated: use fs_read instead of ramdisk_read
   Elf_Ehdr head;
+  printf("filename = %s\n", filename);
   int fd = fs_open(filename, 0, 0);
   // printf("fd = %d\n", fd);
 
