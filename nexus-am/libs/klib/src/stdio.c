@@ -112,7 +112,8 @@ void add_number(char **s, int num,char mode) {
   char temp[100];
   int i = 0;
   if(num<0){
-    add_char(s,'-');
+    if(mode == 'd')
+      add_char(s,'-');
     num=-num;
   }
   if(mode=='d'){
