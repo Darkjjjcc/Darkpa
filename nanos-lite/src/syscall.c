@@ -1,5 +1,8 @@
 #include "common.h"
 #include "syscall.h"
+// PA3.3 updated
+#include "fs.h"
+#include "proc.h"
 
 void sys_yield();
 void sys_exit(int code);
@@ -11,6 +14,8 @@ int sys_open(const char *pathname, int flags, int mode);
 int sys_read(int fd, void *buf, size_t count);
 int sys_lseek(int fd, size_t offset, int whence);
 int sys_close(int fd);
+// PA3.4 updated
+int sys_execve(const char *pathname, char *const argv[], char *const envp[]);
 
 
 _Context* do_syscall(_Context *c) {
@@ -62,7 +67,8 @@ void sys_yield() {
 }
 
 void sys_exit(int code) {
-  _halt(code);
+  // _halt(code);
+  return sys_execve("/bin/init", NULL, NULL);
 }
 
 
@@ -96,4 +102,9 @@ int sys_lseek(int fd, size_t offset, int whence) {
 
 int sys_close(int fd) {
   return fs_close(fd);
+}
+
+int sys_execve(const char *pathname, char *const argv[], char *const envp[]) {
+  naive_uload(NULL, pathname);
+  return 0;
 }
