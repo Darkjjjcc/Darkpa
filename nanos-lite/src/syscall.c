@@ -9,7 +9,7 @@ void sys_exit(int code);
 int sys_write(int fd, void *buf, size_t count);
 int sys_brk(intptr_t addr);
 static int program_break;
-// PA3.3 updated
+// PA3.4 updated
 int sys_open(const char *pathname, int flags, int mode);
 int sys_read(int fd, void *buf, size_t count);
 int sys_lseek(int fd, size_t offset, int whence);
