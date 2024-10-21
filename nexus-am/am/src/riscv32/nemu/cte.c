@@ -7,7 +7,7 @@ _Context* __am_irq_handle(_Context *c) {
   _Context *next = c;
   if (user_handler) {
     _Event ev = {0};
-    // printf("c->cause: %d\n", c->cause);
+    printf("c->cause: %d\n", c->cause);
     switch (c->cause) {
         // PA3 added for system instructions
         case -1:
